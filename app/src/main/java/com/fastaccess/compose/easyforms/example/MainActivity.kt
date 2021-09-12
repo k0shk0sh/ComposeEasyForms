@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,12 +29,14 @@ import com.fastaccess.compose.easyforms.NameValidationType
 import com.fastaccess.compose.easyforms.example.ui.theme.ComposeFormsValidationTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel by viewModels<MainViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val easyForm = EasyForms()
         setContent {
             ComposeFormsValidationTheme {
-                EasyForm(easyForm)
+                EasyForm(viewModel.easyForms)
             }
         }
     }
