@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.input.TextFieldValue
 
-abstract class EasyFormState<T>(
+abstract class EasyFormsState<T>(
     private val easyFormsValidationType: EasyFormsValidationType? = null,
 ) {
     abstract val state: MutableState<T>
@@ -23,10 +23,10 @@ abstract class EasyFormState<T>(
     }
 }
 
-data class EasyFormTextFieldState(
+data class EasyFormsTextFieldState(
     private val defaultValue: String = "",
     private val easyFormsValidationType: EasyFormsValidationType,
-) : EasyFormState<TextFieldValue>(easyFormsValidationType) {
+) : EasyFormsState<TextFieldValue>(easyFormsValidationType) {
 
     override val state: MutableState<TextFieldValue> = mutableStateOf(
         TextFieldValue(defaultValue)
@@ -45,10 +45,10 @@ data class EasyFormTextFieldState(
     }
 }
 
-data class EasyFormCheckboxState(
+data class EasyFormsCheckboxState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
-) : EasyFormState<Boolean>() {
+) : EasyFormsState<Boolean>() {
     override val state: MutableState<Boolean> = mutableStateOf(
         defaultValue
     )
@@ -76,10 +76,10 @@ data class EasyFormCheckboxState(
     }
 }
 
-data class EasyFormTriCheckboxState(
+data class EasyFormsTriCheckboxState(
     private val defaultValue: ToggleableState = ToggleableState.Indeterminate,
     private val isRequired: Boolean = true,
-) : EasyFormState<ToggleableState>() {
+) : EasyFormsState<ToggleableState>() {
     override val state: MutableState<ToggleableState> = mutableStateOf(
         defaultValue
     )
@@ -120,10 +120,10 @@ data class EasyFormTriCheckboxState(
     }
 }
 
-data class EasyFormRadioButtonState(
+data class EasyFormsRadioButtonState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
-) : EasyFormState<Boolean>() {
+) : EasyFormsState<Boolean>() {
     override val state: MutableState<Boolean> = mutableStateOf(
         defaultValue
     )
@@ -148,7 +148,7 @@ data class EasyFormRadioButtonState(
      */
     override val onValueChangedCallback: (Boolean) -> Unit
         get() = throw IllegalAccessError(
-            "can't be used in toggleable checkbox, please use onClick instead"
+            "can't be used in RadioButton, please use onClick instead"
         )
 
     @Composable

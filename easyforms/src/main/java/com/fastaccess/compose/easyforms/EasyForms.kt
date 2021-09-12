@@ -3,16 +3,16 @@ package com.fastaccess.compose.easyforms
 import androidx.compose.ui.state.ToggleableState
 
 class EasyForms {
-    private val forms = mutableMapOf<Any, EasyFormState<*>>()
+    private val forms = mutableMapOf<Any, EasyFormsState<*>>()
 
     fun getTextFieldState(
         key: Any,
         easyFormsValidationType: EasyFormsValidationType,
         defaultValue: String = "",
-    ): EasyFormTextFieldState {
+    ): EasyFormsTextFieldState {
         val currentState = forms[key]
-        if (currentState is EasyFormTextFieldState) return currentState
-        val state = EasyFormTextFieldState(
+        if (currentState is EasyFormsTextFieldState) return currentState
+        val state = EasyFormsTextFieldState(
             defaultValue = defaultValue,
             easyFormsValidationType = easyFormsValidationType
         )
@@ -24,10 +24,10 @@ class EasyForms {
         key: Any,
         defaultValue: Boolean = false,
         isRequired: Boolean = true,
-    ): EasyFormCheckboxState {
+    ): EasyFormsCheckboxState {
         val currentState = forms[key]
-        if (currentState is EasyFormCheckboxState) return currentState
-        val state = EasyFormCheckboxState(
+        if (currentState is EasyFormsCheckboxState) return currentState
+        val state = EasyFormsCheckboxState(
             defaultValue = defaultValue,
             isRequired = isRequired
         )
@@ -39,10 +39,10 @@ class EasyForms {
         key: Any,
         defaultValue: ToggleableState = ToggleableState.Indeterminate,
         isRequired: Boolean = true,
-    ): EasyFormTriCheckboxState {
+    ): EasyFormsTriCheckboxState {
         val currentState = forms[key]
-        if (currentState is EasyFormTriCheckboxState) return currentState
-        val state = EasyFormTriCheckboxState(
+        if (currentState is EasyFormsTriCheckboxState) return currentState
+        val state = EasyFormsTriCheckboxState(
             defaultValue = defaultValue,
             isRequired = isRequired
         )
@@ -54,10 +54,10 @@ class EasyForms {
         key: Any,
         defaultValue: Boolean = false,
         isRequired: Boolean = true,
-    ): EasyFormRadioButtonState {
+    ): EasyFormsRadioButtonState {
         val currentState = forms[key]
-        if (currentState is EasyFormRadioButtonState) return currentState
-        val state = EasyFormRadioButtonState(
+        if (currentState is EasyFormsRadioButtonState) return currentState
+        val state = EasyFormsRadioButtonState(
             defaultValue = defaultValue,
             isRequired = isRequired
         )
@@ -69,22 +69,22 @@ class EasyForms {
     fun formKeys() = forms.keys.toList()
     fun formData() = forms.map {
         when (val value = it.value) {
-            is EasyFormTextFieldState -> EasyFormsResult.StringResult(
+            is EasyFormsTextFieldState -> EasyFormsResult.StringResult(
                 name = it.key,
                 easyFormsErrorState = value.errorState.value,
                 value = value.state.value.text,
             )
-            is EasyFormCheckboxState -> EasyFormsResult.BooleanResult(
+            is EasyFormsCheckboxState -> EasyFormsResult.BooleanResult(
                 name = it.key,
                 easyFormsErrorState = value.errorState.value,
                 value = value.state.value,
             )
-            is EasyFormRadioButtonState -> EasyFormsResult.BooleanResult(
+            is EasyFormsRadioButtonState -> EasyFormsResult.BooleanResult(
                 name = it.key,
                 easyFormsErrorState = value.errorState.value,
                 value = value.state.value,
             )
-            is EasyFormTriCheckboxState -> EasyFormsResult.ToggleableStateResult(
+            is EasyFormsTriCheckboxState -> EasyFormsResult.ToggleableStateResult(
                 name = it.key,
                 easyFormsErrorState = value.errorState.value,
                 value = value.state.value,
