@@ -5,6 +5,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Compose Forms Validation"
-include ':app'
-include ':easyforms'
+rootProject.name = "Compose EasyForms"
+include(":app")
+include(":easyforms")
