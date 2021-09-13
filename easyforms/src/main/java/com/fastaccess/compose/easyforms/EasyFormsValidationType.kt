@@ -1,5 +1,6 @@
 package com.fastaccess.compose.easyforms
 
+import android.util.Patterns
 import androidx.core.util.PatternsCompat
 
 abstract class EasyFormsValidationType(
@@ -44,20 +45,16 @@ object PasswordValidationType : EasyFormsValidationType(
 )
 
 /**
- * Phone Validation using below criteria:
- * - +49 (162) 123 1234
- * - +49 162 123 1234
- * - 162 123 1234
- * - 1621231234
+ * Phone Validation using @see [android.util.Patterns.PHONE]
  */
 object PhoneNumberValidationType : EasyFormsValidationType(
-    regex = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$",
+    regex = Patterns.PHONE.pattern(),
     minLength = 6,
     maxLength = 18,
 )
 
 /**
- * Phone Validation using @see [androidx.core.util.PatternsCompat.WEB_URL]
+ * Url Validation using @see [androidx.core.util.PatternsCompat.WEB_URL]
  */
 object UrlValidationType : EasyFormsValidationType(
     regex = PatternsCompat.WEB_URL.pattern(),

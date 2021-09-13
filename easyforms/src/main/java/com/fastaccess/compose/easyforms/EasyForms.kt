@@ -67,29 +67,5 @@ class EasyForms {
 
     fun errorStates() = forms.values.map { it.errorState }
     fun formKeys() = forms.keys.toList()
-    fun formData() = forms.map {
-        when (val value = it.value) {
-            is EasyFormsTextFieldState -> EasyFormsResult.StringResult(
-                name = it.key,
-                easyFormsErrorState = value.errorState.value,
-                value = value.state.value.text,
-            )
-            is EasyFormsCheckboxState -> EasyFormsResult.BooleanResult(
-                name = it.key,
-                easyFormsErrorState = value.errorState.value,
-                value = value.state.value,
-            )
-            is EasyFormsRadioButtonState -> EasyFormsResult.BooleanResult(
-                name = it.key,
-                easyFormsErrorState = value.errorState.value,
-                value = value.state.value,
-            )
-            is EasyFormsTriCheckboxState -> EasyFormsResult.ToggleableStateResult(
-                name = it.key,
-                easyFormsErrorState = value.errorState.value,
-                value = value.state.value,
-            )
-            else -> throw NullPointerException("${value::class.java} isn't supported yet!")
-        }
-    }
+    fun formData() = forms.map { it.value.mapToResult(it.key) }
 }

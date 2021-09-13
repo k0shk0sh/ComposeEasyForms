@@ -15,6 +15,8 @@ abstract class EasyFormsState<T>(
         mutableStateOf(EasyFormsErrorState.INITIAL)
     }
 
+    abstract fun mapToResult(name: Any): EasyFormsResult
+
     fun isValid(value: String): EasyFormsErrorState {
         return when (easyFormsValidationType?.isValid(value)) {
             true -> EasyFormsErrorState.VALID
@@ -36,6 +38,12 @@ data class EasyFormsTextFieldState(
         state.value = value
         errorState.value = isValid(state.value.text)
     }
+
+    override fun mapToResult(name: Any): EasyFormsResult = EasyFormsResult.StringResult(
+        name = name,
+        value = state.value.text,
+        easyFormsErrorState = errorState.value
+    )
 
     @Composable
     fun rememberSaveable(): MutableState<TextFieldValue> {
@@ -67,6 +75,12 @@ data class EasyFormsCheckboxState(
             }
         }
     }
+
+    override fun mapToResult(name: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
+        name = name,
+        value = state.value,
+        easyFormsErrorState = errorState.value
+    )
 
     @Composable
     fun rememberSaveable(): MutableState<Boolean> {
@@ -112,6 +126,12 @@ data class EasyFormsTriCheckboxState(
             "can't be used in toggleable checkbox, please use onClick instead"
         )
 
+    override fun mapToResult(name: Any): EasyFormsResult = EasyFormsResult.ToggleableStateResult(
+        name = name,
+        value = state.value,
+        easyFormsErrorState = errorState.value
+    )
+
     @Composable
     fun rememberSaveable(): MutableState<ToggleableState> {
         return androidx.compose.runtime.saveable.rememberSaveable {
@@ -150,6 +170,12 @@ data class EasyFormsRadioButtonState(
         get() = throw IllegalAccessError(
             "can't be used in RadioButton, please use onClick instead"
         )
+
+    override fun mapToResult(name: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
+        name = name,
+        value = state.value,
+        easyFormsErrorState = errorState.value
+    )
 
     @Composable
     fun rememberSaveable(): MutableState<Boolean> {
