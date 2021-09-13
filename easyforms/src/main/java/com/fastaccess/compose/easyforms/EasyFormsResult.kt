@@ -35,4 +35,10 @@ sealed class EasyFormsResult(
         override val easyFormsErrorState: EasyFormsErrorState,
         val value: ClosedFloatingPointRange<Float>,
     ) : EasyFormsResult(name = name, easyFormsErrorState = easyFormsErrorState)
+
+    abstract class GenericStateResult<V>(
+        override val name: Any,
+        override val easyFormsErrorState: EasyFormsErrorState,
+        open val value: V,
+    ) : EasyFormsResult(name = name, easyFormsErrorState = easyFormsErrorState)
 }

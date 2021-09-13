@@ -181,6 +181,41 @@ data class EasyFormsRadioButtonState(
     }
 }
 
+data class EasyFormsSwitchState(
+    private val defaultValue: Boolean = false,
+    private val isRequired: Boolean = true,
+) : EasyFormsState<Boolean>() {
+    init {
+        if (!isRequired) errorState.value = EasyFormsErrorState.VALID
+    }
+
+    override val state: MutableState<Boolean> = mutableStateOf(defaultValue)
+
+    override val onValueChangedCallback: (Boolean) -> Unit = { value ->
+        state.value = value
+        if (isRequired) {
+            errorState.value = if (!value) {
+                EasyFormsErrorState.INVALID
+            } else {
+                EasyFormsErrorState.VALID
+            }
+        }
+    }
+
+    override fun mapToResult(name: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
+        name = name,
+        easyFormsErrorState = errorState.value,
+        value = state.value,
+    )
+
+    @Composable
+    fun rememberSaveable(): MutableState<Boolean> {
+        return androidx.compose.runtime.saveable.rememberSaveable {
+            state
+        }
+    }
+}
+
 data class EasyFormsSliderState(
     private val defaultValue: Float = 0F,
     private val isRequired: Boolean = true,
@@ -221,7 +256,7 @@ data class EasyFormsSliderState(
 }
 
 data class EasyFormsRangeSliderState(
-    private val defaultValue: ClosedFloatingPointRange<Float> = 0F..1F,
+    private val defaultValue: ClosedFloatingPointRange<Float> = 0F..0F,
     private val isRequired: Boolean = true,
 ) : EasyFormsState<ClosedFloatingPointRange<Float>>() {
     init {

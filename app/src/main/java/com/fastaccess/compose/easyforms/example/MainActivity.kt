@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -33,14 +35,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeFormsValidationTheme {
-                EasyForm(viewModel.easyForms)
+                EasyForm(viewModel.easyForms) {
+                    viewModel.onButtonClicked()
+                }
             }
         }
     }
 }
 
 @Composable
-private fun EasyForm(easyForm: EasyForms) {
+private fun EasyForm(
+    easyForm: EasyForms,
+    onButtonClicked: () -> Unit,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -59,6 +66,8 @@ private fun EasyForm(easyForm: EasyForms) {
             Space()
             PasswordTextField(easyForm)
             Space()
+            Salutation(easyForm)
+            Space()
             NameTextField(easyForm)
             Space()
             UrlTextField(easyForm)
@@ -76,20 +85,16 @@ private fun EasyForm(easyForm: EasyForms) {
             SmallText("RadioButton")
             RadioButtonLayout(easyForm)
             Space()
+            SmallText("Switch")
+            SwitchLayout(easyForm)
+            Space()
             SmallText("Slider")
             SliderLayout(easyForm)
             Space()
             SmallText("RangeSlider")
             RangeSliderLayout(easyForm)
             Space(34.dp)
-            val formDataState = rememberSaveable() {
-                mutableStateOf<String?>(null)
-            }
-            LoginButton(easyForm, formDataState)
-            Space(34.dp)
-            if (!formDataState.value.isNullOrEmpty()) {
-                Text(formDataState.value!!, style = MaterialTheme.typography.caption)
-            }
+            LoginButton(easyForm, onClick = onButtonClicked)
         }
     }
 }
@@ -97,17 +102,25 @@ private fun EasyForm(easyForm: EasyForms) {
 @Composable
 private fun LoginButton(
     easyForm: EasyForms,
-    formDataState: MutableState<String?>,
+    onClick: () -> Unit,
 ) {
-    val errorStates = easyForm.listenToErrorStates()
-    Button(
-        onClick = {
-            formDataState.value = "${easyForm.formData()}"
-        },
-        modifier = Modifier.fillMaxWidth(),
-        enabled = errorStates.value.all { it.value == EasyFormsErrorState.VALID }
-    ) {
-        Text("Login")
+    Column {
+        val errorStates = easyForm.listenToErrorStates()
+        val formDataState = rememberSaveable() { mutableStateOf<String?>(null) }
+        Button(
+            onClick = {
+                formDataState.value = "${easyForm.formData()}"
+                onClick.invoke()
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = errorStates.value.all { it.value == EasyFormsErrorState.VALID }
+        ) {
+            Text("Login")
+        }
+        Space(34.dp)
+        if (!formDataState.value.isNullOrEmpty()) {
+            Text(formDataState.value!!, style = MaterialTheme.typography.caption)
+        }
     }
 }
 
@@ -122,7 +135,7 @@ private fun CheckboxLayout(easyForm: EasyForms) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         val checkboxState = easyForm.getCheckboxState(
-            "checkbox",
+            MyFormKeys.CHECKBOX,
             defaultValue = false,
             isRequired = true,
         )
@@ -142,12 +155,37 @@ private fun CheckboxLayout(easyForm: EasyForms) {
 }
 
 @Composable
+private fun SwitchLayout(easyForm: EasyForms) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        val state = easyForm.getSwitchState(
+            MyFormKeys.SWITCH,
+            defaultValue = false,
+            isRequired = true,
+        )
+        val checkedState = state.rememberSaveable()
+        Switch(
+            checked = checkedState.value,
+            onCheckedChange = state.onValueChangedCallback,
+        )
+        Space(8.dp)
+        val errorState = state.errorState.value
+        Text(errorState.toString(), color = if (errorState == EasyFormsErrorState.INVALID) {
+            MaterialTheme.colors.error
+        } else {
+            MaterialTheme.colors.onBackground
+        })
+    }
+}
+
+@Composable
 private fun TriCheckboxLayout(easyForm: EasyForms) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val checkboxState = easyForm.getTriCheckboxState(
-            "tricheckbox",
+            MyFormKeys.TRI_CHECKBOX,
             defaultValue = ToggleableState.Indeterminate,
             isRequired = true,
         )
@@ -169,7 +207,7 @@ private fun RadioButtonLayout(easyForm: EasyForms) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         val radioButtonState = easyForm.getRadioButtonState(
-            "radio",
+            MyFormKeys.RADIO_BUTTON,
             defaultValue = false,
             isRequired = true,
         )
@@ -191,7 +229,7 @@ private fun RadioButtonLayout(easyForm: EasyForms) {
 @Composable
 private fun SliderLayout(easyForm: EasyForms) {
     Column {
-        val state = easyForm.getSliderState("slider")
+        val state = easyForm.getSliderState(MyFormKeys.SLIDER)
         val sliderPosition = state.rememberSaveable().value
         Text(text = "${state.errorState.value}:$sliderPosition")
         Slider(
@@ -212,7 +250,7 @@ private fun SliderLayout(easyForm: EasyForms) {
 @Composable
 private fun RangeSliderLayout(easyForm: EasyForms) {
     Column {
-        val state = easyForm.getRangeSliderState("rangeslider")
+        val state = easyForm.getRangeSliderState(MyFormKeys.RANGE_SLIDER)
         val sliderPosition = state.rememberSaveable().value
 
         Text(text = "${state.errorState.value}:$sliderPosition")
@@ -232,7 +270,7 @@ private fun RangeSliderLayout(easyForm: EasyForms) {
 
 @Composable
 private fun NameTextField(easyForm: EasyForms) {
-    val nameTextFieldState = easyForm.getTextFieldState("name", NameValidationType)
+    val nameTextFieldState = easyForm.getTextFieldState(MyFormKeys.NAME, NameValidationType)
     val nameState = nameTextFieldState.rememberSaveable()
     TextField(
         value = nameState.value,
@@ -253,7 +291,7 @@ private fun NameTextField(easyForm: EasyForms) {
 
 @Composable
 private fun EmailTextField(easyForm: EasyForms) {
-    val emailTextFieldState = easyForm.getTextFieldState("email", EmailValidationType)
+    val emailTextFieldState = easyForm.getTextFieldState(MyFormKeys.EMAIL, EmailValidationType)
     val emailState = emailTextFieldState.rememberSaveable()
     TextField(
         value = emailState.value,
@@ -274,7 +312,7 @@ private fun EmailTextField(easyForm: EasyForms) {
 
 @Composable
 private fun PasswordTextField(easyForm: EasyForms) {
-    val textFieldState = easyForm.getTextFieldState("password", PasswordValidationType)
+    val textFieldState = easyForm.getTextFieldState(MyFormKeys.PASSWORD, PasswordValidationType)
     val textState = textFieldState.rememberSaveable()
     val passwordVisibility = remember { mutableStateOf(false) }
     TextField(
@@ -314,7 +352,7 @@ private fun PasswordTextField(easyForm: EasyForms) {
 
 @Composable
 private fun UrlTextField(easyForm: EasyForms) {
-    val textFieldState = easyForm.getTextFieldState("url", UrlValidationType)
+    val textFieldState = easyForm.getTextFieldState(MyFormKeys.URL, UrlValidationType)
     val textState = textFieldState.rememberSaveable()
     TextField(
         value = textState.value,
@@ -335,7 +373,7 @@ private fun UrlTextField(easyForm: EasyForms) {
 
 @Composable
 private fun PhoneTextField(easyForm: EasyForms) {
-    val textFieldState = easyForm.getTextFieldState("phone", PhoneNumberValidationType)
+    val textFieldState = easyForm.getTextFieldState(MyFormKeys.PHONE, PhoneNumberValidationType)
     val textState = textFieldState.rememberSaveable()
     TextField(
         value = textState.value,
@@ -356,7 +394,7 @@ private fun PhoneTextField(easyForm: EasyForms) {
 
 @Composable
 private fun CardTextField(easyForm: EasyForms) {
-    val textFieldState = easyForm.getTextFieldState("creditcard", CardValidationType)
+    val textFieldState = easyForm.getTextFieldState(MyFormKeys.CARD, CardValidationType)
     val textState = textFieldState.rememberSaveable()
     TextField(
         value = textState.value,
@@ -382,8 +420,68 @@ private fun Space(
     Spacer(modifier = Modifier.padding(padding))
 }
 
+
+@Composable
+private fun Salutation(
+    easyForm: EasyForms,
+) {
+    val list = listOf("Mr", "Ms", "Other")
+    val state = easyForm.addAndGetCustomState(MyFormKeys.SALUTATION, MyEasyFormsCustomState(
+        validData = list
+    ))
+    val text = state.rememberSaveable()
+    val isOpen = state.rememberOpen()
+    Box {
+        Column {
+            TextField(
+                value = text.value,
+                onValueChange = {},
+                label = { Text(text = "Salutation") },
+                placeholder = { Text(text = "Salutation") },
+                modifier = Modifier.fillMaxWidth(),
+            )
+            DropDownList(
+                state = state,
+                requestToOpen = isOpen.value,
+                list = list,
+            )
+        }
+        Box(modifier = Modifier
+            .matchParentSize()
+            .alpha(0f)
+            .clickable(onClick = state.onClick))
+    }
+}
+
+@Composable
+private fun DropDownList(
+    state: MyEasyFormsCustomState,
+    requestToOpen: Boolean = false,
+    list: List<String>,
+) {
+    DropdownMenu(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
+        expanded = requestToOpen,
+        onDismissRequest = state.onDismissed,
+    ) {
+        list.forEach {
+            DropdownMenuItem(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { state.onValueChangedCallback(it) }
+            ) {
+                Text(
+                    text = it,
+                    modifier = Modifier.wrapContentWidth(),
+                )
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun ReviewForm() {
-    EasyForm(easyForm = EasyForms())
+    EasyForm(easyForm = EasyForms()) {}
 }

@@ -36,6 +36,21 @@ class EasyForms {
         return state
     }
 
+    fun getSwitchState(
+        key: Any,
+        defaultValue: Boolean = false,
+        isRequired: Boolean = true,
+    ): EasyFormsSwitchState {
+        val currentState = forms[key]
+        if (currentState is EasyFormsSwitchState) return currentState
+        val state = EasyFormsSwitchState(
+            defaultValue = defaultValue,
+            isRequired = isRequired
+        )
+        forms[key] = state
+        return state
+    }
+
     fun getTriCheckboxState(
         key: Any,
         defaultValue: ToggleableState = ToggleableState.Indeterminate,
@@ -83,7 +98,7 @@ class EasyForms {
 
     fun getRangeSliderState(
         key: Any,
-        defaultValue: ClosedFloatingPointRange<Float> = 0F..1F,
+        defaultValue: ClosedFloatingPointRange<Float> = 0F..0F,
         isRequired: Boolean = true,
     ): EasyFormsRangeSliderState {
         val currentState = forms[key]
@@ -92,6 +107,17 @@ class EasyForms {
             defaultValue = defaultValue,
             isRequired = isRequired
         )
+        forms[key] = state
+        return state
+    }
+
+    @Suppress("unchecked_cast")
+    fun <T, S : EasyFormsState<T>> addAndGetCustomState(
+        key: Any,
+        state: S,
+    ): S {
+        val currentState = forms[key]
+        if ((currentState as? S) != null) return currentState
         forms[key] = state
         return state
     }
