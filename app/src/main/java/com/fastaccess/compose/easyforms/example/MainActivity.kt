@@ -75,6 +75,12 @@ private fun EasyForm(easyForm: EasyForms) {
             Space()
             SmallText("RadioButton")
             RadioButtonLayout(easyForm)
+            Space()
+            SmallText("Slider")
+            SliderLayout(easyForm)
+            Space()
+            SmallText("RangeSlider")
+            RangeSliderLayout(easyForm)
             Space(34.dp)
             val formDataState = rememberSaveable() {
                 mutableStateOf<String?>(null)
@@ -179,6 +185,48 @@ private fun RadioButtonLayout(easyForm: EasyForms) {
         } else {
             MaterialTheme.colors.onBackground
         })
+    }
+}
+
+@Composable
+private fun SliderLayout(easyForm: EasyForms) {
+    Column {
+        val state = easyForm.getSliderState("slider")
+        val sliderPosition = state.rememberSaveable().value
+        Text(text = "${state.errorState.value}:$sliderPosition")
+        Slider(
+            value = sliderPosition,
+            onValueChange = state.onValueChangedCallback,
+            valueRange = 0f..100f,
+            onValueChangeFinished = state.onValueChangeFinished,
+            steps = 5,
+            colors = SliderDefaults.colors(
+                thumbColor = MaterialTheme.colors.secondary,
+                activeTrackColor = MaterialTheme.colors.secondary
+            )
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun RangeSliderLayout(easyForm: EasyForms) {
+    Column {
+        val state = easyForm.getRangeSliderState("rangeslider")
+        val sliderPosition = state.rememberSaveable().value
+
+        Text(text = "${state.errorState.value}:$sliderPosition")
+        RangeSlider(
+            steps = 5,
+            values = sliderPosition,
+            onValueChange = state.onValueChangedCallback,
+            valueRange = 0f..100f,
+            onValueChangeFinished = state.onValueChangeFinished,
+            colors = SliderDefaults.colors(
+                thumbColor = MaterialTheme.colors.secondary,
+                activeTrackColor = MaterialTheme.colors.secondary
+            )
+        )
     }
 }
 

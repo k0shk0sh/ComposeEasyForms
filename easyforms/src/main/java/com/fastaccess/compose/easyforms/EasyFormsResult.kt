@@ -23,4 +23,16 @@ sealed class EasyFormsResult(
         override val easyFormsErrorState: EasyFormsErrorState,
         val value: ToggleableState,
     ) : EasyFormsResult(name = name, easyFormsErrorState = easyFormsErrorState)
+
+    data class SliderStateResult(
+        override val name: Any,
+        override val easyFormsErrorState: EasyFormsErrorState,
+        val value: Float,
+    ) : EasyFormsResult(name = name, easyFormsErrorState = easyFormsErrorState)
+
+    data class RangeSliderStateResult(
+        override val name: Any,
+        override val easyFormsErrorState: EasyFormsErrorState,
+        val value: ClosedFloatingPointRange<Float>,
+    ) : EasyFormsResult(name = name, easyFormsErrorState = easyFormsErrorState)
 }
