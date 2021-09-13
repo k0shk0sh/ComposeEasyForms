@@ -1,5 +1,7 @@
 package com.fastaccess.compose.easyforms
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.state.ToggleableState
 
 class EasyForms {
@@ -66,6 +68,7 @@ class EasyForms {
     }
 
     fun errorStates() = forms.values.map { it.errorState }
+    fun listenToErrorStates() = derivedStateOf { errorStates() }
     fun formKeys() = forms.keys.toList()
     fun formData() = forms.map { it.value.mapToResult(it.key) }
 }

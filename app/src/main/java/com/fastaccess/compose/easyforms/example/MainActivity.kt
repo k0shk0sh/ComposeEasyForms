@@ -93,7 +93,7 @@ private fun LoginButton(
     easyForm: EasyForms,
     formDataState: MutableState<String?>,
 ) {
-    val errorStates = derivedStateOf { easyForm.errorStates() }
+    val errorStates = easyForm.listenToErrorStates()
     Button(
         onClick = {
             formDataState.value = "${easyForm.formData()}"
