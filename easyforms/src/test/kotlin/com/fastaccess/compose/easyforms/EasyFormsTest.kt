@@ -213,7 +213,7 @@ class EasyFormsTest {
         val data = easyForms.formData()
         assertEquals(1, data.size)
         assertTrue(data.first() is EasyFormsResult.StringResult)
-        assertEquals(data.first().name, name)
+        assertEquals(data.first().key, name)
         assertEquals(data.first().easyFormsErrorState, EasyFormsErrorState.VALID)
         assertEquals((data.first() as EasyFormsResult.StringResult).value, value)
     }

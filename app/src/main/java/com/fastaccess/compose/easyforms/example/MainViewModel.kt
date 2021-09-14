@@ -25,52 +25,52 @@ class MainViewModel : ViewModel() {
     }
 
     private fun handleToggleable(result: EasyFormsResult.ToggleableStateResult) {
-        when (result.name as MyFormKeys) {
+        when (result.key as MyFormKeys) {
             MyFormKeys.TRI_CHECKBOX -> Unit
-            else -> throw IllegalArgumentException("${result.name} is not handled")
+            else -> throw IllegalArgumentException("${result.key} is not handled")
         }
     }
 
     private fun handleString(result: EasyFormsResult.StringResult) {
-        when (result.name as MyFormKeys) {
+        when (result.key as MyFormKeys) {
             MyFormKeys.EMAIL -> Unit
             MyFormKeys.PASSWORD -> Unit
             MyFormKeys.NAME -> Unit
             MyFormKeys.URL -> Unit
             MyFormKeys.PHONE -> Unit
             MyFormKeys.CARD -> Unit
-            else -> throw IllegalArgumentException("${result.name} is not handled")
+            else -> throw IllegalArgumentException("${result.key} is not handled")
         }
     }
 
     private fun handleRangeSlider(result: EasyFormsResult.RangeSliderStateResult) {
-        when (result.name as MyFormKeys) {
+        when (result.key as MyFormKeys) {
             MyFormKeys.RANGE_SLIDER -> Unit
-            else -> throw IllegalArgumentException("${result.name} is not handled")
+            else -> throw IllegalArgumentException("${result.key} is not handled")
         }
     }
 
     private fun handleSlider(result: EasyFormsResult.SliderStateResult) {
-        when (result.name as MyFormKeys) {
+        when (result.key as MyFormKeys) {
             MyFormKeys.SLIDER -> Unit
-            else -> throw IllegalArgumentException("${result.name} is not handled")
+            else -> throw IllegalArgumentException("${result.key} is not handled")
         }
     }
 
     private fun handleBooleanResult(result: EasyFormsResult.BooleanResult) {
-        when (result.name as MyFormKeys) {
+        when (result.key as MyFormKeys) {
             MyFormKeys.CHECKBOX -> Unit
             MyFormKeys.RADIO_BUTTON -> Unit
             MyFormKeys.SWITCH -> Unit
-            else -> throw IllegalArgumentException("${result.name} is not handled")
+            else -> throw IllegalArgumentException("${result.key} is not handled")
         }
     }
 
     private fun handleGeneric(result: EasyFormsResult.GenericStateResult<*>) {
         when (result) {
-            is MyEasyFormsCustomStringResult -> when (result.name as MyFormKeys) {
+            is MyEasyFormsCustomStringResult -> when (result.key as MyFormKeys) {
                 MyFormKeys.SALUTATION -> Unit
-                else -> throw IllegalArgumentException("${result.name} is not handled")
+                else -> throw IllegalArgumentException("${result.key} is not handled")
             }
             is MyEasyFormsCustomCheckboxListResult -> Unit
             else -> Unit //handle other custom results

@@ -1,3 +1,5 @@
+import java.net.URL
+
 plugins {
     id(AppPlugins.ANDROID_LIB)
     id(AppPlugins.KOTLIN_ANDROID)
@@ -66,11 +68,32 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.COMPOSE_UI_TEST)
 }
 
-tasks.dokkaHtml.configure {
+tasks.dokkaHtmlPartial.configure {
     dokkaSourceSets {
         named("main") {
+            failOnWarning.set(true)
+            reportUndocumented.set(true)
+            skipEmptyPackages.set(true)
+            skipDeprecated.set(true)
+            jdkVersion.set(8)
             noAndroidSdkLink.set(false)
-            includeNonPublic.set(true)
+            samples.from(rootProject.file("../app/src/main/java/"))
+
+            // AndroidX + Compose docs
+            externalDocumentationLink {
+                url.set(URL("https://developer.android.com/reference/"))
+                packageListUrl.set(URL("https://developer.android.com/reference/androidx/package-list"))
+            }
+            externalDocumentationLink {
+                url.set(URL("https://developer.android.com/reference/kotlin/"))
+                packageListUrl.set(URL("https://developer.android.com/reference/kotlin/androidx/package-list"))
+            }
+
+            sourceLink {
+                localDirectory.set(project.file("src/main/java"))
+                remoteUrl.set(URL("https://github.com/k0shk0sh/ComposeEasyForms/blob/main/${project.name}/src/main/java"))
+                remoteLineSuffix.set("#L")
+            }
         }
     }
     outputDirectory.set(file("../dokka"))

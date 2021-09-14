@@ -31,9 +31,9 @@ class MyEasyFormsCustomStringState(
         }
     }
 
-    override fun mapToResult(name: Any): EasyFormsResult {
+    override fun mapToResult(key: Any): EasyFormsResult {
         return MyEasyFormsCustomStringResult(
-            name = name,
+            key = key,
             easyFormsErrorState = errorState.value,
             value = state.value,
         )
@@ -53,11 +53,11 @@ class MyEasyFormsCustomStringState(
 }
 
 data class MyEasyFormsCustomStringResult(
-    override val name: Any,
+    override val key: Any,
     override val easyFormsErrorState: EasyFormsErrorState,
     override val value: String,
 ) : EasyFormsResult.GenericStateResult<String>(
-    name = name,
+    key = key,
     easyFormsErrorState = easyFormsErrorState,
     value = value,
 )

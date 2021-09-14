@@ -22,7 +22,7 @@ abstract class EasyFormsState<ST, CT> {
         mutableStateOf(EasyFormsErrorState.INITIAL)
     }
 
-    abstract fun mapToResult(name: Any): EasyFormsResult
+    abstract fun mapToResult(key: Any): EasyFormsResult
 }
 
 /**
@@ -49,8 +49,8 @@ data class EasyFormsTextFieldState(
         errorState.value = isValid(state.value.text)
     }
 
-    override fun mapToResult(name: Any): EasyFormsResult = EasyFormsResult.StringResult(
-        name = name,
+    override fun mapToResult(key: Any): EasyFormsResult = EasyFormsResult.StringResult(
+        key = key,
         easyFormsErrorState = errorState.value,
         value = state.value.text,
     )
@@ -98,8 +98,8 @@ data class EasyFormsCheckboxState(
         }
     }
 
-    override fun mapToResult(name: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
-        name = name,
+    override fun mapToResult(key: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
+        key = key,
         easyFormsErrorState = errorState.value,
         value = state.value,
     )
@@ -154,8 +154,8 @@ data class EasyFormsTriCheckboxState(
             "can't be used in toggleable checkbox, please use onClick instead"
         )
 
-    override fun mapToResult(name: Any): EasyFormsResult = EasyFormsResult.ToggleableStateResult(
-        name = name,
+    override fun mapToResult(key: Any): EasyFormsResult = EasyFormsResult.ToggleableStateResult(
+        key = key,
         easyFormsErrorState = errorState.value,
         value = state.value,
     )
@@ -204,8 +204,8 @@ data class EasyFormsRadioButtonState(
             "can't be used in RadioButton, please use onClick instead"
         )
 
-    override fun mapToResult(name: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
-        name = name,
+    override fun mapToResult(key: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
+        key = key,
         value = state.value,
         easyFormsErrorState = errorState.value
     )
@@ -246,8 +246,8 @@ data class EasyFormsSwitchState(
         }
     }
 
-    override fun mapToResult(name: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
-        name = name,
+    override fun mapToResult(key: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
+        key = key,
         easyFormsErrorState = errorState.value,
         value = state.value,
     )
@@ -290,9 +290,9 @@ data class EasyFormsSliderState(
         state.value = it
     }
 
-    override fun mapToResult(name: Any): EasyFormsResult.SliderStateResult {
+    override fun mapToResult(key: Any): EasyFormsResult.SliderStateResult {
         return EasyFormsResult.SliderStateResult(
-            name = name,
+            key = key,
             easyFormsErrorState = errorState.value,
             value = state.value,
         )
@@ -338,9 +338,9 @@ data class EasyFormsRangeSliderState(
         state.value = it
     }
 
-    override fun mapToResult(name: Any): EasyFormsResult.RangeSliderStateResult {
+    override fun mapToResult(key: Any): EasyFormsResult.RangeSliderStateResult {
         return EasyFormsResult.RangeSliderStateResult(
-            name = name,
+            key = key,
             easyFormsErrorState = errorState.value,
             value = state.value,
         )

@@ -14,7 +14,6 @@ import com.fastaccess.compose.easyforms.EasyForms
 import com.fastaccess.compose.easyforms.example.custom_states.MyEasyFormsCustomStringState
 import com.fastaccess.compose.easyforms.example.custom_states.MyFormKeys
 
-
 @Composable
 fun Salutation(
     easyForm: EasyForms,

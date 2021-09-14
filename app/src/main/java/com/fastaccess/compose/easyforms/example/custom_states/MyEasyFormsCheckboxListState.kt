@@ -34,9 +34,9 @@ class MyEasyFormsCheckboxListState(
         }
     }
 
-    override fun mapToResult(name: Any): EasyFormsResult {
+    override fun mapToResult(key: Any): EasyFormsResult {
         return MyEasyFormsCustomCheckboxListResult(
-            name = name,
+            key = key,
             easyFormsErrorState = errorState.value,
             value = state.filter { it.isSelected }
         )
@@ -57,11 +57,11 @@ class MyEasyFormsCheckboxListState(
 }
 
 class MyEasyFormsCustomCheckboxListResult(
-    override val name: Any,
+    override val key: Any,
     override val easyFormsErrorState: EasyFormsErrorState,
     override val value: List<CheckboxModel>,
 ) : EasyFormsResult.GenericStateResult<List<CheckboxModel>>(
-    name = name,
+    key = key,
     easyFormsErrorState = easyFormsErrorState,
     value = value
 )
