@@ -30,6 +30,7 @@ android {
         jvmTarget = AppConfig.JVM_TARGET
     }
     buildFeatures {
+        buildConfig = false
         compose = true
     }
     composeOptions {
@@ -65,3 +66,5 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.ESPRESSO_CORE)
     androidTestImplementation(AndroidTestDependencies.COMPOSE_UI_TEST)
 }
+
+apply(plugin = AppPlugins.PUBLISH)

@@ -16,7 +16,7 @@ object AppPlugins {
     const val KOTLIN_ANDROID = "kotlin-android"
     const val KOTLIN_PARCELIZE = "kotlin-parcelize"
     const val DOKKA = "org.jetbrains.dokka"
-    const val DOKKA_CLASSPATH = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.0"
+    const val PUBLISH = "com.vanniktech.maven.publish"
     const val AGP = "com.android.tools.build:gradle:${DependenciesVersion.AGP_VERSION}"
     const val KGP = "org.jetbrains.kotlin:kotlin-gradle-plugin:${DependenciesVersion.KGP_VERSION}"
 }
@@ -34,6 +34,8 @@ object DependenciesVersion {
     const val TEST_EXT_VERSION = "1.1.3"
     const val ESPRESSO_CORE_VERSION = "3.4.0"
     const val MOCKITO_VERSION = "3.2.0"
+    const val DOKKA_VERSION = "1.5.0"
+    const val PUBLISH_VERSION = "0.18.0"
 }
 
 object ComposeDependencies {

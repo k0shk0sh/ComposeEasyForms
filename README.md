@@ -25,7 +25,7 @@ Focus on building your form UI while the library do the heavy work for you.
 
 Define `val easyForms = EasyForms()` in your ViewModel or in your Activity/Fragment upper in UI tree to prevent reinitializing the object.
 
-> You should have always one instance of `EasyForms` in your Screen.
+> You should have always one instance of `EasyForms` per Screen.
 
 **TextField example with Email validation:**
 
