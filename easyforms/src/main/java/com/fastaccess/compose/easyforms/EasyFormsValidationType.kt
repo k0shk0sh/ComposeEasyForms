@@ -58,12 +58,13 @@ object PasswordValidationType : EasyFormsValidationType(
  * - Number must contain at most 19 digits.
  * - Number can start with +.
  * - Number can contains whitespaces in between.
- * - Number can contains - or () only on the second part ex: 012 (123) 123 123, 012 - 123 123 123.
+ * - Number can contains () as second part of the number.
+ * - Number can contains - as a separator.
  */
 object PhoneNumberValidationType : EasyFormsValidationType(
-    regex = "[+0-9()\\- ]{7,19}",
-    minLength = 6,
-    maxLength = 18,
+    regex = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}\$",
+    minLength = 7,
+    maxLength = 19,
 )
 
 /**

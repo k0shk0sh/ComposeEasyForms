@@ -1,5 +1,7 @@
 package com.fastaccess.compose.easyforms
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.input.TextFieldValue
 import org.junit.Assert.*
@@ -79,6 +81,32 @@ class EasyFormsTest {
         val value = "password1!"
         assertKeysAreEmpty()
         val state = easyForms.getTextFieldState(name, PasswordValidationType)
+        assertEquals(EasyFormsErrorState.INITIAL, state.errorState.value)
+        state.onValueChangedCallback.invoke(TextFieldValue(value))
+        assertEquals(EasyFormsErrorState.INVALID, state.errorState.value)
+        assertEquals(value, state.state.value.text)
+        assertKeysNotEmpty()
+    }
+
+    @Test
+    fun `test getTextFieldState with phone validation is valid`() {
+        val name = "textField"
+        val value = "+49 (123) 456 7899"
+        assertKeysAreEmpty()
+        val state = easyForms.getTextFieldState(name, PhoneNumberValidationType)
+        assertEquals(EasyFormsErrorState.INITIAL, state.errorState.value)
+        state.onValueChangedCallback.invoke(TextFieldValue(value))
+        assertEquals(EasyFormsErrorState.VALID, state.errorState.value)
+        assertEquals(value, state.state.value.text)
+        assertKeysNotEmpty()
+    }
+
+    @Test
+    fun `test getTextFieldState with phone validation is invalid`() {
+        val name = "textField"
+        val value = "123"
+        assertKeysAreEmpty()
+        val state = easyForms.getTextFieldState(name, PhoneNumberValidationType)
         assertEquals(EasyFormsErrorState.INITIAL, state.errorState.value)
         state.onValueChangedCallback.invoke(TextFieldValue(value))
         assertEquals(EasyFormsErrorState.INVALID, state.errorState.value)
@@ -198,6 +226,15 @@ class EasyFormsTest {
         assertKeysNotEmpty()
     }
 
+    @Test
+    fun `test addAndGetCustomState with valid state returns same instance`() {
+        val key = "key"
+        val state = easyForms.addAndGetCustomState(key, TestCustomState())
+        assertTrue(easyForms.formKeys().size == 1)
+        val newState = easyForms.addAndGetCustomState(key, TestCustomState())
+        assertTrue(easyForms.formKeys().size == 1)
+        assertEquals(state, newState)
+    }
 
     @Test
     fun `test data() returns empty list`() {
@@ -218,7 +255,24 @@ class EasyFormsTest {
         assertEquals((data.first() as EasyFormsResult.StringResult).value, value)
     }
 
-
     private fun assertKeysNotEmpty() = assertTrue(easyForms.formKeys().isNotEmpty())
     private fun assertKeysAreEmpty() = assertTrue(easyForms.formKeys().isEmpty())
 }
+
+private class TestCustomState : EasyFormsState<MutableState<Any>, Any>() {
+    override val state: MutableState<Any> = mutableStateOf("")
+    override val onValueChangedCallback: (Any) -> Unit = {}
+    override fun mapToResult(key: Any): EasyFormsResult {
+        return TestCustomResult(key, errorState.value, state.value)
+    }
+}
+
+private class TestCustomResult(
+    override val key: Any,
+    override val easyFormsErrorState: EasyFormsErrorState,
+    override val value: Any,
+) : EasyFormsResult.GenericStateResult<Any>(
+    key = key,
+    easyFormsErrorState = easyFormsErrorState,
+    value = value,
+)
