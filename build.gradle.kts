@@ -50,7 +50,7 @@ subprojects {
                         }
                     }
                 }
-                outputDirectory.set(file("../api"))
+                outputDirectory.set(file("../docs"))
             }
         }
     }
