@@ -4,7 +4,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.state.ToggleableState
 
 class EasyForms {
-    private val forms = mutableMapOf<Any, EasyFormsState<*>>()
+    private val forms = mutableMapOf<Any, EasyFormsState<*, *>>()
 
     fun getTextFieldState(
         key: Any,
@@ -112,7 +112,7 @@ class EasyForms {
     }
 
     @Suppress("unchecked_cast")
-    fun <T, S : EasyFormsState<T>> addAndGetCustomState(
+    fun <ST, CT, S : EasyFormsState<ST, CT>> addAndGetCustomState(
         key: Any,
         state: S,
     ): S {

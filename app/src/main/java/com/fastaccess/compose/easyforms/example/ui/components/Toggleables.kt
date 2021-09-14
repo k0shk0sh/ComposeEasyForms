@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.dp
 import com.fastaccess.compose.easyforms.EasyForms
 import com.fastaccess.compose.easyforms.EasyFormsErrorState
-import com.fastaccess.compose.easyforms.example.MyFormKeys
+import com.fastaccess.compose.easyforms.example.custom_states.MyEasyFormsCheckboxListState
+import com.fastaccess.compose.easyforms.example.custom_states.MyFormKeys
+import com.fastaccess.compose.easyforms.example.model.CheckboxModel
 
 @Composable
 fun CheckboxLayout(easyForm: EasyForms) {
@@ -27,6 +30,42 @@ fun CheckboxLayout(easyForm: EasyForms) {
         )
         Space(8.dp)
         val errorState = checkboxState.errorState.value
+        Text(errorState.toString(), color = if (errorState == EasyFormsErrorState.INVALID) {
+            MaterialTheme.colors.error
+        } else {
+            MaterialTheme.colors.onBackground
+        })
+    }
+}
+
+@Composable
+fun ListCustomCheckboxLayout(
+    easyForm: EasyForms,
+    list: List<CheckboxModel>,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        val state = easyForm.addAndGetCustomState(
+            MyFormKeys.LIST_CHECKBOX,
+            MyEasyFormsCheckboxListState(
+                list,
+                isRequired = true,
+            )
+        )
+        val checkedState = state.rememberSaveable()
+        Row {
+            checkedState.forEach { checkboxModel ->
+                Checkbox(
+                    checked = checkboxModel.isSelected,
+                    onCheckedChange = {
+                        state.onValueChangedCallback(checkboxModel.id to it)
+                    },
+                )
+            }
+        }
+        Space(8.dp)
+        val errorState = state.errorState.value
         Text(errorState.toString(), color = if (errorState == EasyFormsErrorState.INVALID) {
             MaterialTheme.colors.error
         } else {

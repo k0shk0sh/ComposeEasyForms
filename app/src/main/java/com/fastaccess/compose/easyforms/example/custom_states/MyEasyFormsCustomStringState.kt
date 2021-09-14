@@ -1,33 +1,30 @@
-package com.fastaccess.compose.easyforms.example
+package com.fastaccess.compose.easyforms.example.custom_states
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import com.fastaccess.compose.easyforms.EasyFormsErrorState
 import com.fastaccess.compose.easyforms.EasyFormsResult
 import com.fastaccess.compose.easyforms.EasyFormsState
 
-class MyEasyFormsCustomState(
+class MyEasyFormsCustomStringState(
     defaultValue: String = "",
     private val validData: List<String>,
-) : EasyFormsState<String>() {
+) : EasyFormsState<MutableState<String>, String>() {
 
-    private val isOpen = mutableStateOf(false)
+    private val _isOpen = mutableStateOf(false)
 
     val onDismissed: () -> Unit = {
-        isOpen.value = false
+        _isOpen.value = false
     }
 
     val onClick: () -> Unit = {
-        isOpen.value = true
+        _isOpen.value = true
     }
 
     override val state: MutableState<String> = mutableStateOf(defaultValue)
 
     override val onValueChangedCallback: (String) -> Unit = {
         state.value = it
-        isOpen.value = false
+        _isOpen.value = false
         errorState.value = when (it in validData) {
             true -> EasyFormsErrorState.VALID
             false -> EasyFormsErrorState.INVALID
@@ -35,7 +32,7 @@ class MyEasyFormsCustomState(
     }
 
     override fun mapToResult(name: Any): EasyFormsResult {
-        return MyEasyFormsCustomResult(
+        return MyEasyFormsCustomStringResult(
             name = name,
             easyFormsErrorState = errorState.value,
             value = state.value,
@@ -50,12 +47,12 @@ class MyEasyFormsCustomState(
     }
 
     @Composable
-    fun rememberOpen(): MutableState<Boolean> {
-        return remember { isOpen }
+    fun rememberOpen(): State<Boolean> {
+        return remember { _isOpen }
     }
 }
 
-data class MyEasyFormsCustomResult(
+data class MyEasyFormsCustomStringResult(
     override val name: Any,
     override val easyFormsErrorState: EasyFormsErrorState,
     override val value: String,

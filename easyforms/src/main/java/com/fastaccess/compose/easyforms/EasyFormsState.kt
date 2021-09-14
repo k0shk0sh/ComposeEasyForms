@@ -8,11 +8,11 @@ import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.TextFieldValue
 
-abstract class EasyFormsState<T>(
+abstract class EasyFormsState<ST, CT>(
     private val easyFormsValidationType: EasyFormsValidationType? = null,
 ) {
-    abstract val state: MutableState<T>
-    abstract val onValueChangedCallback: (T) -> Unit
+    abstract val state: ST
+    abstract val onValueChangedCallback: (CT) -> Unit
     val errorState: MutableState<EasyFormsErrorState> by lazy {
         mutableStateOf(EasyFormsErrorState.INITIAL)
     }
@@ -30,7 +30,7 @@ abstract class EasyFormsState<T>(
 data class EasyFormsTextFieldState(
     private val defaultValue: String = "",
     private val easyFormsValidationType: EasyFormsValidationType,
-) : EasyFormsState<TextFieldValue>(easyFormsValidationType) {
+) : EasyFormsState<MutableState<TextFieldValue>, TextFieldValue>(easyFormsValidationType) {
 
     override val state: MutableState<TextFieldValue> = mutableStateOf(
         TextFieldValue(defaultValue)
@@ -58,7 +58,7 @@ data class EasyFormsTextFieldState(
 data class EasyFormsCheckboxState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
-) : EasyFormsState<Boolean>() {
+) : EasyFormsState<MutableState<Boolean>, Boolean>() {
     init {
         if (!isRequired) errorState.value = EasyFormsErrorState.VALID
     }
@@ -93,7 +93,7 @@ data class EasyFormsCheckboxState(
 data class EasyFormsTriCheckboxState(
     private val defaultValue: ToggleableState = ToggleableState.Indeterminate,
     private val isRequired: Boolean = true,
-) : EasyFormsState<ToggleableState>() {
+) : EasyFormsState<MutableState<ToggleableState>, ToggleableState>() {
     init {
         if (!isRequired) errorState.value = EasyFormsErrorState.VALID
     }
@@ -141,7 +141,7 @@ data class EasyFormsTriCheckboxState(
 data class EasyFormsRadioButtonState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
-) : EasyFormsState<Boolean>() {
+) : EasyFormsState<MutableState<Boolean>, Boolean>() {
     init {
         if (!isRequired) errorState.value = EasyFormsErrorState.VALID
     }
@@ -184,7 +184,7 @@ data class EasyFormsRadioButtonState(
 data class EasyFormsSwitchState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
-) : EasyFormsState<Boolean>() {
+) : EasyFormsState<MutableState<Boolean>, Boolean>() {
     init {
         if (!isRequired) errorState.value = EasyFormsErrorState.VALID
     }
@@ -219,7 +219,7 @@ data class EasyFormsSwitchState(
 data class EasyFormsSliderState(
     private val defaultValue: Float = 0F,
     private val isRequired: Boolean = true,
-) : EasyFormsState<Float>() {
+) : EasyFormsState<MutableState<Float>, Float>() {
     init {
         if (!isRequired) errorState.value = EasyFormsErrorState.VALID
     }
@@ -258,7 +258,7 @@ data class EasyFormsSliderState(
 data class EasyFormsRangeSliderState(
     private val defaultValue: ClosedFloatingPointRange<Float> = 0F..0F,
     private val isRequired: Boolean = true,
-) : EasyFormsState<ClosedFloatingPointRange<Float>>() {
+) : EasyFormsState<MutableState<ClosedFloatingPointRange<Float>>, ClosedFloatingPointRange<Float>>() {
     init {
         if (!isRequired) errorState.value = EasyFormsErrorState.VALID
     }

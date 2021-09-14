@@ -1,6 +1,7 @@
 plugins {
     id(AppPlugins.ANDROID_APP)
     id(AppPlugins.KOTLIN_ANDROID)
+    id(AppPlugins.KOTLIN_PARCELIZE)
 }
 
 android {

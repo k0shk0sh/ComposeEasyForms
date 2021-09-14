@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import com.fastaccess.compose.easyforms.EasyForms
-import com.fastaccess.compose.easyforms.example.MyFormKeys
+import com.fastaccess.compose.easyforms.example.custom_states.MyFormKeys
 
 @Composable
 fun SliderLayout(easyForm: EasyForms) {

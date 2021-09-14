@@ -3,6 +3,9 @@ package com.fastaccess.compose.easyforms.example
 import androidx.lifecycle.ViewModel
 import com.fastaccess.compose.easyforms.EasyForms
 import com.fastaccess.compose.easyforms.EasyFormsResult
+import com.fastaccess.compose.easyforms.example.custom_states.MyEasyFormsCustomCheckboxListResult
+import com.fastaccess.compose.easyforms.example.custom_states.MyEasyFormsCustomStringResult
+import com.fastaccess.compose.easyforms.example.custom_states.MyFormKeys
 
 class MainViewModel : ViewModel() {
     val easyForms = EasyForms()
@@ -65,10 +68,11 @@ class MainViewModel : ViewModel() {
 
     private fun handleGeneric(result: EasyFormsResult.GenericStateResult<*>) {
         when (result) {
-            is MyEasyFormsCustomResult -> when (result.name as MyFormKeys) {
+            is MyEasyFormsCustomStringResult -> when (result.name as MyFormKeys) {
                 MyFormKeys.SALUTATION -> TODO()
                 else -> throw IllegalArgumentException("${result.name} is not handled")
             }
+            is MyEasyFormsCustomCheckboxListResult -> TODO()
             else -> TODO() //handle other custom results
         }
     }

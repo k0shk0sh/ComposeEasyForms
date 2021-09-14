@@ -14,6 +14,7 @@ object AppPlugins {
     const val ANDROID_APP = "com.android.application"
     const val ANDROID_LIB = "com.android.library"
     const val KOTLIN_ANDROID = "kotlin-android"
+    const val KOTLIN_PARCELIZE = "kotlin-parcelize"
     const val AGP = "com.android.tools.build:gradle:${DependenciesVersion.AGP_VERSION}"
     const val KGP = "org.jetbrains.kotlin:kotlin-gradle-plugin:${DependenciesVersion.KGP_VERSION}"
 }

@@ -16,7 +16,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.fastaccess.compose.easyforms.*
-import com.fastaccess.compose.easyforms.example.MyFormKeys
+import com.fastaccess.compose.easyforms.example.custom_states.MyFormKeys
 
 @Composable
 fun NameTextField(easyForm: EasyForms) {

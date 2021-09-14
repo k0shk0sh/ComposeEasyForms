@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fastaccess.compose.easyforms.*
 import com.fastaccess.compose.easyforms.example.MainViewModel
+import com.fastaccess.compose.easyforms.example.model.listOfCheckboxes
 import com.fastaccess.compose.easyforms.example.ui.components.*
 import com.fastaccess.compose.easyforms.example.ui.theme.ComposeFormsValidationTheme
 
@@ -71,6 +72,9 @@ private fun EasyForm(
             Space()
             SmallText("Checkbox")
             CheckboxLayout(easyForm)
+            Space()
+            SmallText("Custom ListCheckbox (Min Checked 2)")
+            ListCustomCheckboxLayout(easyForm, listOfCheckboxes())
             Space()
             SmallText("TriCheckbox")
             TriCheckboxLayout(easyForm)

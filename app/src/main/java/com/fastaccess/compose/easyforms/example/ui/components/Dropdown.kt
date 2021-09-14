@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import com.fastaccess.compose.easyforms.EasyForms
-import com.fastaccess.compose.easyforms.example.MyEasyFormsCustomState
-import com.fastaccess.compose.easyforms.example.MyFormKeys
+import com.fastaccess.compose.easyforms.example.custom_states.MyEasyFormsCustomStringState
+import com.fastaccess.compose.easyforms.example.custom_states.MyFormKeys
 
 
 @Composable
@@ -20,7 +20,7 @@ fun Salutation(
     easyForm: EasyForms,
 ) {
     val list = listOf("Mr", "Ms", "Other")
-    val state = easyForm.addAndGetCustomState(MyFormKeys.SALUTATION, MyEasyFormsCustomState(
+    val state = easyForm.addAndGetCustomState(MyFormKeys.SALUTATION, MyEasyFormsCustomStringState(
         validData = list
     ))
     val text = state.rememberSaveable()
@@ -49,7 +49,7 @@ fun Salutation(
 
 @Composable
 private fun DropDownList(
-    state: MyEasyFormsCustomState,
+    state: MyEasyFormsCustomStringState,
     requestToOpen: Boolean = false,
     list: List<String>,
 ) {
