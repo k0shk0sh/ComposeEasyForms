@@ -1,6 +1,7 @@
 plugins {
     id(AppPlugins.ANDROID_LIB)
     id(AppPlugins.KOTLIN_ANDROID)
+    id(AppPlugins.DOKKA)
 }
 
 android {
@@ -63,4 +64,14 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.EXT_JUNIT)
     androidTestImplementation(AndroidTestDependencies.ESPRESSO_CORE)
     androidTestImplementation(AndroidTestDependencies.COMPOSE_UI_TEST)
+}
+
+tasks.dokkaHtml.configure {
+    dokkaSourceSets {
+        named("main") {
+            noAndroidSdkLink.set(false)
+            includeNonPublic.set(true)
+        }
+    }
+    outputDirectory.set(file("../dokka"))
 }

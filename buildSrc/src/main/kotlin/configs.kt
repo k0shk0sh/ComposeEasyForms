@@ -15,6 +15,8 @@ object AppPlugins {
     const val ANDROID_LIB = "com.android.library"
     const val KOTLIN_ANDROID = "kotlin-android"
     const val KOTLIN_PARCELIZE = "kotlin-parcelize"
+    const val DOKKA = "org.jetbrains.dokka"
+    const val DOKKA_CLASSPATH = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.0"
     const val AGP = "com.android.tools.build:gradle:${DependenciesVersion.AGP_VERSION}"
     const val KGP = "org.jetbrains.kotlin:kotlin-gradle-plugin:${DependenciesVersion.KGP_VERSION}"
 }

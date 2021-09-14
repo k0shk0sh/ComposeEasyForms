@@ -1,16 +1,21 @@
 package com.fastaccess.compose.easyforms
 
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.TextFieldValue
 
-abstract class EasyFormsState<ST, CT>(
-    private val easyFormsValidationType: EasyFormsValidationType? = null,
-) {
+/**
+ * @param ST defines the State type, for ex: [MutableState], [SnapshotStateList] etc.
+ * @param CT defines the type to use in [onValueChangedCallback].
+ */
+abstract class EasyFormsState<ST, CT> {
     abstract val state: ST
     abstract val onValueChangedCallback: (CT) -> Unit
     val errorState: MutableState<EasyFormsErrorState> by lazy {
@@ -18,19 +23,22 @@ abstract class EasyFormsState<ST, CT>(
     }
 
     abstract fun mapToResult(name: Any): EasyFormsResult
-
-    fun isValid(value: String): EasyFormsErrorState {
-        return when (easyFormsValidationType?.isValid(value)) {
-            true -> EasyFormsErrorState.VALID
-            else -> EasyFormsErrorState.INVALID
-        }
-    }
 }
 
+/**
+ * @property defaultValue the default value to be used in the [TextField] if any provided.
+ * @property easyFormsValidationType pass one of EasyForms validationTypes or your custom type.
+ */
 data class EasyFormsTextFieldState(
     private val defaultValue: String = "",
     private val easyFormsValidationType: EasyFormsValidationType,
-) : EasyFormsState<MutableState<TextFieldValue>, TextFieldValue>(easyFormsValidationType) {
+) : EasyFormsState<MutableState<TextFieldValue>, TextFieldValue>() {
+
+    init {
+        if (defaultValue.isNotBlank()) {
+            errorState.value = isValid(defaultValue)
+        }
+    }
 
     override val state: MutableState<TextFieldValue> = mutableStateOf(
         TextFieldValue(defaultValue)
@@ -47,20 +55,34 @@ data class EasyFormsTextFieldState(
         value = state.value.text,
     )
 
+    /**
+     * Returns a [rememberSaveable] state that will survive across configuration changes
+     */
     @Composable
     fun rememberSaveable(): MutableState<TextFieldValue> {
-        return androidx.compose.runtime.saveable.rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        return rememberSaveable(stateSaver = TextFieldValue.Saver) {
             state
+        }
+    }
+
+    private fun isValid(value: String): EasyFormsErrorState {
+        return when (easyFormsValidationType.isValid(value)) {
+            true -> EasyFormsErrorState.VALID
+            false -> EasyFormsErrorState.INVALID
         }
     }
 }
 
+/**
+ * @property defaultValue the default value to be used in the [Checkbox].
+ * @property isRequired defines if the [Checkbox] has to be checked to be considered valid.
+ */
 data class EasyFormsCheckboxState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
 ) : EasyFormsState<MutableState<Boolean>, Boolean>() {
     init {
-        if (!isRequired) errorState.value = EasyFormsErrorState.VALID
+        if (!isRequired || defaultValue) errorState.value = EasyFormsErrorState.VALID
     }
 
     override val state: MutableState<Boolean> = mutableStateOf(defaultValue)
@@ -82,20 +104,29 @@ data class EasyFormsCheckboxState(
         value = state.value,
     )
 
+    /**
+     * Returns a [rememberSaveable] state that will survive across configuration changes
+     */
     @Composable
     fun rememberSaveable(): MutableState<Boolean> {
-        return androidx.compose.runtime.saveable.rememberSaveable {
+        return rememberSaveable {
             state
         }
     }
 }
 
+/**
+ * @property defaultValue The default value to be used in the [TriStateCheckbox].
+ * @property isRequired defines if the [TriStateCheckbox] can't be unchecked to be considered valid.
+ */
 data class EasyFormsTriCheckboxState(
     private val defaultValue: ToggleableState = ToggleableState.Indeterminate,
     private val isRequired: Boolean = true,
-) : EasyFormsState<MutableState<ToggleableState>, ToggleableState>() {
+) : EasyFormsState<MutableState<ToggleableState>, Nothing>() {
     init {
-        if (!isRequired) errorState.value = EasyFormsErrorState.VALID
+        if (!isRequired || defaultValue == ToggleableState.On) {
+            errorState.value = EasyFormsErrorState.VALID
+        }
     }
 
     override val state: MutableState<ToggleableState> = mutableStateOf(defaultValue)
@@ -109,9 +140,8 @@ data class EasyFormsTriCheckboxState(
         state.value = newState
         if (isRequired) {
             errorState.value = when (newState) {
-                ToggleableState.On -> EasyFormsErrorState.VALID
                 ToggleableState.Off -> EasyFormsErrorState.INVALID
-                ToggleableState.Indeterminate -> EasyFormsErrorState.INITIAL
+                else -> EasyFormsErrorState.VALID
             }
         }
     }
@@ -119,7 +149,7 @@ data class EasyFormsTriCheckboxState(
     /**
      * @hide
      */
-    override val onValueChangedCallback: (ToggleableState) -> Unit
+    override val onValueChangedCallback: (Nothing) -> Unit
         get() = throw IllegalAccessError(
             "can't be used in toggleable checkbox, please use onClick instead"
         )
@@ -130,20 +160,27 @@ data class EasyFormsTriCheckboxState(
         value = state.value,
     )
 
+    /**
+     * Returns a [rememberSaveable] state that will survive across configuration changes
+     */
     @Composable
     fun rememberSaveable(): MutableState<ToggleableState> {
-        return androidx.compose.runtime.saveable.rememberSaveable {
+        return rememberSaveable {
             state
         }
     }
 }
 
+/**
+ * @property defaultValue the default value to be used in the [RadioButton].
+ * @property isRequired defines if the [RadioButton] has to be checked to be considered valid.
+ */
 data class EasyFormsRadioButtonState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
-) : EasyFormsState<MutableState<Boolean>, Boolean>() {
+) : EasyFormsState<MutableState<Boolean>, Nothing>() {
     init {
-        if (!isRequired) errorState.value = EasyFormsErrorState.VALID
+        if (!isRequired || defaultValue) errorState.value = EasyFormsErrorState.VALID
     }
 
     override val state: MutableState<Boolean> = mutableStateOf(defaultValue)
@@ -162,7 +199,7 @@ data class EasyFormsRadioButtonState(
     /**
      * @hide
      */
-    override val onValueChangedCallback: (Boolean) -> Unit
+    override val onValueChangedCallback: (Nothing) -> Unit
         get() = throw IllegalAccessError(
             "can't be used in RadioButton, please use onClick instead"
         )
@@ -173,20 +210,27 @@ data class EasyFormsRadioButtonState(
         easyFormsErrorState = errorState.value
     )
 
+    /**
+     * Returns a [rememberSaveable] state that will survive across configuration changes
+     */
     @Composable
     fun rememberSaveable(): MutableState<Boolean> {
-        return androidx.compose.runtime.saveable.rememberSaveable {
+        return rememberSaveable {
             state
         }
     }
 }
 
+/**
+ * @property defaultValue the default value to be used in the [Switch].
+ * @property isRequired defines if the [Switch] has to be toggled to be considered valid.
+ */
 data class EasyFormsSwitchState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
 ) : EasyFormsState<MutableState<Boolean>, Boolean>() {
     init {
-        if (!isRequired) errorState.value = EasyFormsErrorState.VALID
+        if (!isRequired || defaultValue) errorState.value = EasyFormsErrorState.VALID
     }
 
     override val state: MutableState<Boolean> = mutableStateOf(defaultValue)
@@ -208,20 +252,27 @@ data class EasyFormsSwitchState(
         value = state.value,
     )
 
+    /**
+     * Returns a [rememberSaveable] state that will survive across configuration changes
+     */
     @Composable
     fun rememberSaveable(): MutableState<Boolean> {
-        return androidx.compose.runtime.saveable.rememberSaveable {
+        return rememberSaveable {
             state
         }
     }
 }
 
+/**
+ * @property defaultValue the default value to be used in the [Slider].
+ * @property isRequired defines if the [Slider] value must be > 0 to be considered valid.
+ */
 data class EasyFormsSliderState(
     private val defaultValue: Float = 0F,
     private val isRequired: Boolean = true,
 ) : EasyFormsState<MutableState<Float>, Float>() {
     init {
-        if (!isRequired) errorState.value = EasyFormsErrorState.VALID
+        if (!isRequired || defaultValue > 0F) errorState.value = EasyFormsErrorState.VALID
     }
 
     val onValueChangeFinished: () -> Unit = {
@@ -247,20 +298,29 @@ data class EasyFormsSliderState(
         )
     }
 
+    /**
+     * Returns a [rememberSaveable] state that will survive across configuration changes
+     */
     @Composable
     fun rememberSaveable(): MutableState<Float> {
-        return androidx.compose.runtime.saveable.rememberSaveable {
+        return rememberSaveable {
             state
         }
     }
 }
 
+/**
+ * @property defaultValue the default value to be used in the [RangeSlider].
+ * @property isRequired defines if the [RangeSlider] range must be in 0f..xf to be considered valid.
+ */
 data class EasyFormsRangeSliderState(
     private val defaultValue: ClosedFloatingPointRange<Float> = 0F..0F,
     private val isRequired: Boolean = true,
 ) : EasyFormsState<MutableState<ClosedFloatingPointRange<Float>>, ClosedFloatingPointRange<Float>>() {
     init {
-        if (!isRequired) errorState.value = EasyFormsErrorState.VALID
+        if (!isRequired || (defaultValue.start > 0F || defaultValue.endInclusive > 0F)) {
+            errorState.value = EasyFormsErrorState.VALID
+        }
     }
 
     val onValueChangeFinished: () -> Unit = {
@@ -286,9 +346,12 @@ data class EasyFormsRangeSliderState(
         )
     }
 
+    /**
+     * Returns a [rememberSaveable] state that will survive across configuration changes
+     */
     @Composable
     fun rememberSaveable(): MutableState<ClosedFloatingPointRange<Float>> {
-        return androidx.compose.runtime.saveable.rememberSaveable(stateSaver = Saver) {
+        return rememberSaveable(stateSaver = Saver) {
             state
         }
     }

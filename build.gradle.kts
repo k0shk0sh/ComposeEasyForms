@@ -7,9 +7,16 @@ buildscript {
     dependencies {
         classpath(AppPlugins.AGP)
         classpath(AppPlugins.KGP)
+        classpath(AppPlugins.DOKKA_CLASSPATH)
     }
 }
 
-//task clean(type: Delete) {
-//    delete rootProject.buildDir
-//}
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            allWarningsAsErrors = true
+            jvmTarget = "1.8"
+            freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
+        }
+    }
+}
