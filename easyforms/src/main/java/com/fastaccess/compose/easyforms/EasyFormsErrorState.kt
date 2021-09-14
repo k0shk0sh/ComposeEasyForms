@@ -1,5 +1,8 @@
 package com.fastaccess.compose.easyforms
 
+/**
+ * Represent the three different states a field could have.
+ */
 enum class EasyFormsErrorState {
     /**
      * This is the default state for all of the form fields as it provide better UX

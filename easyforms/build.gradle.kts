@@ -68,7 +68,7 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.COMPOSE_UI_TEST)
 }
 
-tasks.dokkaHtmlPartial.configure {
+tasks.dokkaGfm.configure {
     dokkaSourceSets {
         named("main") {
             failOnWarning.set(true)
@@ -78,8 +78,6 @@ tasks.dokkaHtmlPartial.configure {
             jdkVersion.set(8)
             noAndroidSdkLink.set(false)
             samples.from(rootProject.file("../app/src/main/java/"))
-
-            // AndroidX + Compose docs
             externalDocumentationLink {
                 url.set(URL("https://developer.android.com/reference/"))
                 packageListUrl.set(URL("https://developer.android.com/reference/androidx/package-list"))
@@ -88,7 +86,6 @@ tasks.dokkaHtmlPartial.configure {
                 url.set(URL("https://developer.android.com/reference/kotlin/"))
                 packageListUrl.set(URL("https://developer.android.com/reference/kotlin/androidx/package-list"))
             }
-
             sourceLink {
                 localDirectory.set(project.file("src/main/java"))
                 remoteUrl.set(URL("https://github.com/k0shk0sh/ComposeEasyForms/blob/main/${project.name}/src/main/java"))

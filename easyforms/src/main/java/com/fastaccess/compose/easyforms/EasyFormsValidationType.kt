@@ -2,6 +2,11 @@ package com.fastaccess.compose.easyforms
 
 import androidx.core.util.PatternsCompat
 
+/**
+ * @property minLength defines a text should have a minimum set of chars.
+ * @property maxLength defines a text should have a maximum set of chars.
+ * @property regex the regex to be used to validate the text if any.
+ */
 abstract class EasyFormsValidationType(
     open val minLength: Int = Int.MIN_VALUE,
     open val maxLength: Int = Int.MAX_VALUE,

@@ -16,12 +16,29 @@ import androidx.compose.ui.text.input.TextFieldValue
  * @param CT defines the type to use in [onValueChangedCallback].
  */
 abstract class EasyFormsState<ST, CT> {
+    /**
+     * This is the [ST] you defined when you inherited from this class.
+     */
     abstract val state: ST
+
+    /**
+     * This callback is usually being used by most of Form fields of Compose,
+     * however there are some widgets that can't use this callback,
+     * therefore please ignore its implementation.
+     */
     abstract val onValueChangedCallback: (CT) -> Unit
+
+    /**
+     * The error state that is used across all children of [EasyFormsState].
+     */
     val errorState: MutableState<EasyFormsErrorState> by lazy {
         mutableStateOf(EasyFormsErrorState.INITIAL)
     }
 
+    /**
+     * @param key the identifier key for the state.
+     * @return a mapped object of [EasyFormsResult].
+     */
     abstract fun mapToResult(key: Any): EasyFormsResult
 }
 
@@ -131,6 +148,9 @@ data class EasyFormsTriCheckboxState(
 
     override val state: MutableState<ToggleableState> = mutableStateOf(defaultValue)
 
+    /**
+     * Used instead of [onValueChangedCallback] as this widget only accepts onClick.
+     */
     val onClick = {
         val newState = when (state.value) {
             ToggleableState.On -> ToggleableState.Indeterminate
@@ -185,6 +205,9 @@ data class EasyFormsRadioButtonState(
 
     override val state: MutableState<Boolean> = mutableStateOf(defaultValue)
 
+    /**
+     * Used instead of [onValueChangedCallback] as this widget only accepts onClick.
+     */
     val onClick = {
         state.value = !state.value
         if (isRequired) {
@@ -275,6 +298,9 @@ data class EasyFormsSliderState(
         if (!isRequired || defaultValue > 0F) errorState.value = EasyFormsErrorState.VALID
     }
 
+    /**
+     * Triggered when the user stops sliding the [Slider]  to determine the error state.
+     */
     val onValueChangeFinished: () -> Unit = {
         if (isRequired) {
             errorState.value = when (state.value) {
@@ -323,6 +349,9 @@ data class EasyFormsRangeSliderState(
         }
     }
 
+    /**
+     * Triggered when the user stops sliding the [RangeSlider] to determine the error state.
+     */
     val onValueChangeFinished: () -> Unit = {
         if (isRequired) {
             errorState.value = when (state.value) {
@@ -356,6 +385,9 @@ data class EasyFormsRangeSliderState(
         }
     }
 
+    /**
+     * @suppress
+     */
     companion object {
         /**
          * The default [Saver] implementation for [ClosedFloatingPointRange].
