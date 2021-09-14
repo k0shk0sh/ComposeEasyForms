@@ -1,0 +1,45 @@
+name: Build And Test
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v2
+
+    - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches/modules-*
+          ~/.gradle/caches/jars-*
+          ~/.gradle/caches/build-cache-*
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Assemble
+        run: |
+          ./gradlew --stacktrace \
+              assemble
+    - name: UnitTests
+        run: |
+          ./gradlew --stacktrace \
+              :easyforms:testDebugUnitTest
