@@ -192,7 +192,7 @@ class EasyForms {
 
     /**
      * This method is useful when you only want to enable/disable
-     * Your CTA until all required fields are Valid.
+     * your CTA until all required fields are Valid.
      * @return derivedState of all your form fields error states.
      */
     fun observeFormStates() = derivedStateOf { formStates() }

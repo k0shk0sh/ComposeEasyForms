@@ -24,7 +24,7 @@ abstract class EasyFormsState<ST, CT> {
     /**
      * This callback is usually being used by most of Form fields of Compose,
      * however there are some widgets that can't use this callback,
-     * therefore please ignore its implementation.
+     * therefore please ignore its implementation when its not neccessary.
      */
     abstract val onValueChangedCallback: (CT) -> Unit
 
@@ -44,7 +44,8 @@ abstract class EasyFormsState<ST, CT> {
 
 /**
  * @property defaultValue the default value to be used in the [TextField] if any provided.
- * @property easyFormsValidationType pass one of EasyForms validationTypes or your custom type.
+ * @property easyFormsValidationType pass one of EasyForms validationTypes
+ * or your custom type.
  */
 data class EasyFormsTextFieldState(
     private val defaultValue: String = "",
@@ -134,7 +135,8 @@ data class EasyFormsCheckboxState(
 
 /**
  * @property defaultValue The default value to be used in the [TriStateCheckbox].
- * @property isRequired defines if the [TriStateCheckbox] can't be unchecked to be considered valid.
+ * @property isRequired defines if the [TriStateCheckbox]
+ * can't be unchecked to be considered valid.
  */
 data class EasyFormsTriCheckboxState(
     private val defaultValue: ToggleableState = ToggleableState.Indeterminate,
@@ -193,7 +195,8 @@ data class EasyFormsTriCheckboxState(
 
 /**
  * @property defaultValue the default value to be used in the [RadioButton].
- * @property isRequired defines if the [RadioButton] has to be checked to be considered valid.
+ * @property isRequired defines if the [RadioButton]
+ * has to be checked to be considered valid.
  */
 data class EasyFormsRadioButtonState(
     private val defaultValue: Boolean = false,
@@ -299,7 +302,7 @@ data class EasyFormsSliderState(
     }
 
     /**
-     * Triggered when the user stops sliding the [Slider]  to determine the error state.
+     * Triggered when the user stops sliding the [Slider] to determine the error state.
      */
     val onValueChangeFinished: () -> Unit = {
         if (isRequired) {
@@ -337,7 +340,8 @@ data class EasyFormsSliderState(
 
 /**
  * @property defaultValue the default value to be used in the [RangeSlider].
- * @property isRequired defines if the [RangeSlider] range must be in 0f..xf to be considered valid.
+ * @property isRequired defines if the [RangeSlider]
+ * range must be in 0f..xf to be considered valid.
  */
 data class EasyFormsRangeSliderState(
     private val defaultValue: ClosedFloatingPointRange<Float> = 0F..0F,
