@@ -15,6 +15,11 @@ buildscript {
 plugins {
     id(AppPlugins.DOKKA) version DependenciesVersion.DOKKA_VERSION
     id(AppPlugins.PUBLISH) version DependenciesVersion.PUBLISH_VERSION
+    id(AppPlugins.GITHUB_RELEASE) version DependenciesVersion.GITHUB_RELEASE_VERSION
+}
+
+apply {
+    plugin<com.github.k0shk0sh.plugins.LibVersionPlugin>()
 }
 
 subprojects {

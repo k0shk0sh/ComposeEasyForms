@@ -16,6 +16,7 @@ object AppPlugins {
     const val KOTLIN_PARCELIZE = "kotlin-parcelize"
     const val DOKKA = "org.jetbrains.dokka"
     const val PUBLISH = "com.vanniktech.maven.publish"
+    const val GITHUB_RELEASE = "com.github.breadmoirai.github-release"
     const val AGP = "com.android.tools.build:gradle:${DependenciesVersion.AGP_VERSION}"
     const val KGP = "org.jetbrains.kotlin:kotlin-gradle-plugin:${DependenciesVersion.KGP_VERSION}"
 }
@@ -35,6 +36,7 @@ object DependenciesVersion {
     const val MOCKITO_VERSION = "3.2.0"
     const val DOKKA_VERSION = "1.5.0"
     const val PUBLISH_VERSION = "0.18.0"
+    const val GITHUB_RELEASE_VERSION = "2.2.12"
 }
 
 object ComposeDependencies {
