@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fastaccess.compose.easyforms.example">
+    package="com.github.k0shk0sh.compose.easyforms.example">
 
     <application
         android:allowBackup="false"

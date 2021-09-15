@@ -1,8 +1,7 @@
 import org.gradle.api.JavaVersion
 
 object AppConfig {
-    const val EXAMPLE_PACKAGE_NAME = "com.fastaccess.compose.forms.example"
-    const val Lib_PACKAGE_NAME = "com.fastaccess.compose.easyforms"
+    const val EXAMPLE_PACKAGE_NAME = "com.github.k0shk0sh.compose.easyforms.example"
     const val COMPILE_SDK = 31
     const val MIN_SDK = 21
     const val TARGET_SDK = COMPILE_SDK
@@ -76,4 +75,17 @@ object AndroidTestDependencies {
         "androidx.test.espresso:espresso-core:${DependenciesVersion.ESPRESSO_CORE_VERSION}"
     const val COMPOSE_UI_TEST =
         "androidx.compose.ui:ui-test-junit4:${DependenciesVersion.COMPOSE_VERSION}"
+}
+
+object DokkaConfig {
+    const val MAIN = "main"
+    const val SAMPLES = "app/src/main/java/"
+    const val ANDROID_REF_URL = "https://developer.android.com/reference/"
+    const val ANDROIDX_REF_URL = "https://developer.android.com/reference/androidx/package-list"
+    const val ANDROID_KOTLIN_REF_URL ="https://developer.android.com/reference/kotlin/"
+    const val ANDROIDX_KOTLIN_REF_URL = "https://developer.android.com/reference/kotlin/androidx/package-list"
+    const val LOCAL_SRC_DIR = "src/main/java"
+    const val REMOTE_SRC_DIR = "https://github.com/k0shk0sh/ComposeEasyForms/blob/main/%s/src/main/java"
+    const val LINE_NUM = "#L"
+    const val OUTPUT_DIR = "../docs"
 }

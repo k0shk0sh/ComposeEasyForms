@@ -1,6 +1,7 @@
-
 # Compose EasyForms
 Focus on building your form UI while the library do the heavy work for you.
+
+## Features
 
 ### Out of the box EasyForms support below Compose widgets:
 - TextField
@@ -20,6 +21,8 @@ Focus on building your form UI while the library do the heavy work for you.
 - Name validation
 - Cards validation
 - Your own custom validator
+
+## Example
 
 ### How to use:
 
