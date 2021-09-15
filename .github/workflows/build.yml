@@ -1,11 +1,11 @@
 name: Build And Test
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**.md'
+#  push:
+#    branches:
+#      - main
+#    paths-ignore:
+#      - '**.md'
   pull_request:
     paths-ignore:
       - '**.md'
