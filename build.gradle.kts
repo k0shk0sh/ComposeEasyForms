@@ -35,6 +35,16 @@ subprojects {
     }
 }
 
+githubRelease {
+    token("")
+    owner("k0shk0sh")
+    repo("ComposeEasyForms")
+    tagName("v1.0.0")
+    targetCommitish("main")
+    releaseName("v1.0.0")
+    body(changelog())
+}
+
 fun Project.configureDokka() {
     if (plugins.hasPlugin(AppPlugins.DOKKA)) {
         tasks.withType<DokkaTask>().configureEach {
