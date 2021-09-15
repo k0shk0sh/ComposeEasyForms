@@ -1,5 +1,5 @@
 
-![build-status](https://github.com/k0shk0sh/ComposeEasyForms/actions/workflows/build.yml/badge.svg) [![Maven Central](https://img.shields.io/maven-central/v/com.github.k0shk0sh.compose.easyforms/easyforms)](https://search.maven.org/search?q=g:com.github.k0shk0sh.compose.easyforms)
+![build-status](https://github.com/k0shk0sh/ComposeEasyForms/actions/workflows/build.yml/badge.svg) [![Maven Central](https://img.shields.io/maven-central/v/com.github.k0shk0sh.compose.easyforms/compose-easyforms)](https://search.maven.org/search?q=g:com.github.k0shk0sh.compose.easyforms)
 
 
 # Compose EasyForms
