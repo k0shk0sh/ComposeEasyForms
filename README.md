@@ -26,6 +26,18 @@ Focus on building your form UI while the library do the heavy work for you.
 - Cards validation
 - Your own custom validator
 
+## Download
+
+```kotlin
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.github.k0shk0sh:compose-easyforms:<version>")
+}
+```
+
 ## Example
 
 ### How to use:
