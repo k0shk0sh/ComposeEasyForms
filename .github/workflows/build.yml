@@ -1,14 +1,16 @@
-name: Build And Test
+name: Build
 
 on:
-#  push:
-#    branches:
-#      - main
-#    paths-ignore:
-#      - '**.md'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '**.html'
   pull_request:
     paths-ignore:
       - '**.md'
+      - '**.html'
 
 jobs:
   build:
