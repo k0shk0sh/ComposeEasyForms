@@ -6,6 +6,7 @@ import LibVersionProvider
 import increaseMajor
 import increaseMinor
 import increasePatch
+import getLibVersion
 
 class LibVersionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -64,7 +65,7 @@ class LibVersionPlugin : Plugin<Project> {
         project: Project,
         libFile: LibVersion,
     ) {
-        project.version = "${libFile.major}.${libFile.minor}.${libFile.patch}"
+        project.version = libFile.getLibVersion()
     }
 
 }

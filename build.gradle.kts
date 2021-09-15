@@ -9,12 +9,12 @@ buildscript {
     dependencies {
         classpath(AppPlugins.AGP)
         classpath(AppPlugins.KGP)
+        classpath(AppPlugins.PUBLISH)
     }
 }
 
 plugins {
     id(AppPlugins.DOKKA) version DependenciesVersion.DOKKA_VERSION
-    id(AppPlugins.PUBLISH) version DependenciesVersion.PUBLISH_VERSION
     id(AppPlugins.GITHUB_RELEASE) version DependenciesVersion.GITHUB_RELEASE_VERSION
 }
 
@@ -36,7 +36,7 @@ subprojects {
 }
 
 githubRelease {
-    token("")
+    token(System.getenv("GITHUB_TOKEN"))
     owner("k0shk0sh")
     repo("ComposeEasyForms")
     tagName("v1.0.0")
@@ -75,4 +75,13 @@ fun Project.configureDokka() {
             outputDirectory.set(file(DokkaConfig.OUTPUT_DIR))
         }
     }
+}
+
+tasks.create("minorRelease") {
+    dependsOn("nextMinor")
+    project.afterEvaluate {
+        dependsOn("publishToMavenLocal")
+    }
+//        .dependsOn("closeAndReleaseRepository")
+//        .dependsOn("githubRelease")
 }

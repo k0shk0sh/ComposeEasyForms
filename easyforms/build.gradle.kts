@@ -67,4 +67,4 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.COMPOSE_UI_TEST)
 }
 
-apply(plugin = AppPlugins.PUBLISH)
+apply { plugin(AppPlugins.PUBLISH_PLUGIN) }

@@ -4,23 +4,25 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.compose.easyforms.*
-import com.github.k0shk0sh.compose.easyforms.example.MainViewModel
-import com.github.k0shk0sh.compose.easyforms.example.model.listOfCheckboxes
-import com.github.compose.easyforms.example.ui.components.*
-import com.github.k0shk0sh.compose.easyforms.example.ui.theme.ComposeFormsValidationTheme
 import com.github.k0shk0sh.compose.easyforms.EasyForms
 import com.github.k0shk0sh.compose.easyforms.EasyFormsErrorState
+import com.github.k0shk0sh.compose.easyforms.example.MainViewModel
+import com.github.k0shk0sh.compose.easyforms.example.model.listOfCheckboxes
 import com.github.k0shk0sh.compose.easyforms.example.ui.components.*
+import com.github.k0shk0sh.compose.easyforms.example.ui.theme.ComposeFormsValidationTheme
 
 class MainActivity : ComponentActivity() {
 

@@ -9,16 +9,32 @@ object AppConfig {
     val javaCompileOptions = JavaVersion.VERSION_1_8
 }
 
+object DokkaConfig {
+    const val MAIN = "main"
+    const val SAMPLES = "app/src/main/java/"
+    const val ANDROID_REF_URL = "https://developer.android.com/reference/"
+    const val ANDROIDX_REF_URL = "https://developer.android.com/reference/androidx/package-list"
+    const val ANDROID_KOTLIN_REF_URL = "https://developer.android.com/reference/kotlin/"
+    const val ANDROIDX_KOTLIN_REF_URL =
+        "https://developer.android.com/reference/kotlin/androidx/package-list"
+    const val LOCAL_SRC_DIR = "src/main/java"
+    const val REMOTE_SRC_DIR =
+        "https://github.com/k0shk0sh/ComposeEasyForms/blob/main/%s/src/main/java"
+    const val LINE_NUM = "#L"
+    const val OUTPUT_DIR = "../docs"
+}
+
 object AppPlugins {
     const val ANDROID_APP = "com.android.application"
     const val ANDROID_LIB = "com.android.library"
     const val KOTLIN_ANDROID = "kotlin-android"
     const val KOTLIN_PARCELIZE = "kotlin-parcelize"
     const val DOKKA = "org.jetbrains.dokka"
-    const val PUBLISH = "com.vanniktech.maven.publish"
+    const val PUBLISH_PLUGIN = "com.vanniktech.maven.publish"
     const val GITHUB_RELEASE = "com.github.breadmoirai.github-release"
     const val AGP = "com.android.tools.build:gradle:${DependenciesVersion.AGP_VERSION}"
     const val KGP = "org.jetbrains.kotlin:kotlin-gradle-plugin:${DependenciesVersion.KGP_VERSION}"
+    const val PUBLISH = "com.vanniktech:gradle-maven-publish-plugin:${DependenciesVersion.PUBLISH_VERSION}"
 }
 
 object DependenciesVersion {
@@ -77,17 +93,4 @@ object AndroidTestDependencies {
         "androidx.test.espresso:espresso-core:${DependenciesVersion.ESPRESSO_CORE_VERSION}"
     const val COMPOSE_UI_TEST =
         "androidx.compose.ui:ui-test-junit4:${DependenciesVersion.COMPOSE_VERSION}"
-}
-
-object DokkaConfig {
-    const val MAIN = "main"
-    const val SAMPLES = "app/src/main/java/"
-    const val ANDROID_REF_URL = "https://developer.android.com/reference/"
-    const val ANDROIDX_REF_URL = "https://developer.android.com/reference/androidx/package-list"
-    const val ANDROID_KOTLIN_REF_URL ="https://developer.android.com/reference/kotlin/"
-    const val ANDROIDX_KOTLIN_REF_URL = "https://developer.android.com/reference/kotlin/androidx/package-list"
-    const val LOCAL_SRC_DIR = "src/main/java"
-    const val REMOTE_SRC_DIR = "https://github.com/k0shk0sh/ComposeEasyForms/blob/main/%s/src/main/java"
-    const val LINE_NUM = "#L"
-    const val OUTPUT_DIR = "../docs"
 }
