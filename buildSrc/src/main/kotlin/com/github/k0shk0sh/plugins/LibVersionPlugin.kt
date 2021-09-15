@@ -1,12 +1,6 @@
 package com.github.k0shk0sh.plugins
 
 import org.gradle.api.*
-import LibVersion
-import LibVersionProvider
-import increaseMajor
-import increaseMinor
-import increasePatch
-import getLibVersion
 
 class LibVersionPlugin : Plugin<Project> {
     override fun apply(target: Project) {

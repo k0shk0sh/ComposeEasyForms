@@ -16,10 +16,7 @@ buildscript {
 plugins {
     id(AppPlugins.DOKKA) version DependenciesVersion.DOKKA_VERSION
     id(AppPlugins.GITHUB_RELEASE) version DependenciesVersion.GITHUB_RELEASE_VERSION
-}
-
-apply {
-    plugin<com.github.k0shk0sh.plugins.LibVersionPlugin>()
+    `lib-version`
 }
 
 subprojects {
@@ -75,13 +72,4 @@ fun Project.configureDokka() {
             outputDirectory.set(file(DokkaConfig.OUTPUT_DIR))
         }
     }
-}
-
-tasks.create("minorRelease") {
-    dependsOn("nextMinor")
-    project.afterEvaluate {
-        dependsOn("publishToMavenLocal")
-    }
-//        .dependsOn("closeAndReleaseRepository")
-//        .dependsOn("githubRelease")
 }

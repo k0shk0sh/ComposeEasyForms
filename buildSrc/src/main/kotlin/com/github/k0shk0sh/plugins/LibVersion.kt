@@ -1,3 +1,5 @@
+package com.github.k0shk0sh.plugins
+
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import java.io.File
