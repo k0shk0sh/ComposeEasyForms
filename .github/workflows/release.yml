@@ -39,6 +39,11 @@ jobs:
 
       - name: Update Docs
         run: ./gradlew :easyforms:dokkaHtml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Github Release
+          run: ./gradlew nextMinor githubRelease
 
       - name: Commit & Push changes
         uses: actions-js/push@master
