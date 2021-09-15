@@ -43,7 +43,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Github Release
-          run: ./gradlew nextMinor githubRelease
+        run: ./gradlew nextMinor githubRelease
 
       - name: Commit & Push changes
         uses: actions-js/push@master
