@@ -1,15 +1,18 @@
 name: Publish Release
 
 on:
-  push:
-    tags:
-      - '*'
+  pull_request:
+    branches:
+      - main
+    types: [ closed ]
 
 jobs:
   publish:
-
     runs-on: ubuntu-latest
-    if: github.repository == 'k0shk0sh/ComposeEasyForms'
+    if: |
+      github.repository == 'k0shk0sh/ComposeEasyForms' &&
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.labels.*.name, 'release')
 
     steps:
       - name: Checkout

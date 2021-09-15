@@ -1,5 +1,8 @@
+import com.github.k0shk0sh.plugins.getLibVersion
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URL
+import com.github.k0shk0sh.plugins.LibVersionProvider
 
 buildscript {
     repositories {
@@ -20,25 +23,20 @@ plugins {
 }
 
 subprojects {
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        kotlinOptions {
-            allWarningsAsErrors = true
-            jvmTarget = AppConfig.JVM_TARGET
-            freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
-        }
-    }
+    configureKotlinCompile()
     afterEvaluate {
         configureDokka()
     }
 }
 
 githubRelease {
+    val version =  { LibVersionProvider.versionFile().getLibVersion() }
     token(System.getenv("GITHUB_TOKEN"))
     owner("k0shk0sh")
     repo("ComposeEasyForms")
-    tagName("v1.0.0")
+    tagName(version)
     targetCommitish("main")
-    releaseName("v1.0.0")
+    releaseName(version)
     body(changelog())
 }
 
@@ -70,6 +68,16 @@ fun Project.configureDokka() {
                 }
             }
             outputDirectory.set(file(DokkaConfig.OUTPUT_DIR))
+        }
+    }
+}
+
+fun Project.configureKotlinCompile() {
+    tasks.withType<KotlinCompile>().configureEach {
+        kotlinOptions {
+            allWarningsAsErrors = true
+            jvmTarget = AppConfig.JVM_TARGET
+            freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
         }
     }
 }
