@@ -24,7 +24,7 @@ abstract class EasyFormsState<ST, CT> {
     /**
      * This callback is usually being used by most of Form fields of Compose,
      * however there are some widgets that can't use this callback,
-     * therefore please ignore its implementation when its not neccessary.
+     * therefore please ignore its implementation when its not necessary.
      */
     abstract val onValueChangedCallback: (CT) -> Unit
 
@@ -123,7 +123,7 @@ data class EasyFormsCheckboxState(
     )
 
     /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes
+     * Returns a [rememberSaveable] state that will survive across configuration changes.
      */
     @Composable
     fun rememberSaveable(): MutableState<Boolean> {
@@ -168,9 +168,6 @@ data class EasyFormsTriCheckboxState(
         }
     }
 
-    /**
-     * @hide
-     */
     override val onValueChangedCallback: (Nothing) -> Unit
         get() = throw IllegalAccessError(
             "can't be used in toggleable checkbox, please use onClick instead"
@@ -183,7 +180,7 @@ data class EasyFormsTriCheckboxState(
     )
 
     /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes
+     * Returns a [rememberSaveable] state that will survive across configuration changes.
      */
     @Composable
     fun rememberSaveable(): MutableState<ToggleableState> {
@@ -237,7 +234,7 @@ data class EasyFormsRadioButtonState(
     )
 
     /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes
+     * Returns a [rememberSaveable] state that will survive across configuration changes.
      */
     @Composable
     fun rememberSaveable(): MutableState<Boolean> {
@@ -279,7 +276,7 @@ data class EasyFormsSwitchState(
     )
 
     /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes
+     * Returns a [rememberSaveable] state that will survive across configuration changes.
      */
     @Composable
     fun rememberSaveable(): MutableState<Boolean> {
@@ -328,7 +325,7 @@ data class EasyFormsSliderState(
     }
 
     /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes
+     * Returns a [rememberSaveable] state that will survive across configuration changes.
      */
     @Composable
     fun rememberSaveable(): MutableState<Float> {
@@ -380,7 +377,7 @@ data class EasyFormsRangeSliderState(
     }
 
     /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes
+     * Returns a [rememberSaveable] state that will survive across configuration changes.
      */
     @Composable
     fun rememberSaveable(): MutableState<ClosedFloatingPointRange<Float>> {

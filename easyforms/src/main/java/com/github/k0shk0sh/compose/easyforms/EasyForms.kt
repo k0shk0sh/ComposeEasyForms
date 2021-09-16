@@ -151,7 +151,7 @@ class EasyForms {
      * @param key a unique identifier for this state.
      * @param defaultValue control where the [RangeSlider] position should be placed at.
      * @param isRequired if this is true, then the user must select a position between 0F and xF.
-     * @return [EasyFormsRangeSliderState] that provide RangeSlider state handling
+     * @return [EasyFormsRangeSliderState] that provide RangeSlider state handling.
      */
     fun getRangeSliderState(
         key: Any,

@@ -12,7 +12,7 @@ data class LibVersion(
 
 fun LibVersion.increaseMajor() = this.copy(major = major + 1, minor = 0, patch = 0)
 fun LibVersion.increaseMinor() = this.copy(minor = minor + 1)
-fun LibVersion.increasePatch() = this.copy(minor = patch + 1)
+fun LibVersion.increasePatch() = this.copy(patch = patch + 1)
 fun LibVersion.getLibVersion() = "$major.$minor.$patch"
 fun LibVersion.toMap(): Map<String, Int> = mapOf(
     "major" to major, "minor" to minor, "patch" to patch,

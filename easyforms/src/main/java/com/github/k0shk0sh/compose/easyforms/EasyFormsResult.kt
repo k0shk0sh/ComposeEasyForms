@@ -16,7 +16,7 @@ sealed class EasyFormsResult(
      * Default class to handle [String] result from ex: [TextField].
      * @param key a unique identifier for this state.
      * @param easyFormsErrorState the current [EasyFormsErrorState] this state has.
-     * @param value the text value.
+     * @param value the text entered in [TextField].
      */
     data class StringResult(
         override val key: Any,
@@ -28,7 +28,7 @@ sealed class EasyFormsResult(
      * Default class to handle [Boolean] result from ex: [Checkbox].
      * @param key a unique identifier for this state.
      * @param easyFormsErrorState the current [EasyFormsErrorState] this state has.
-     * @param value the boolean value.
+     * @param value the toggleable state from [Checkbox], [RadioButton], [Switch] etc.
      */
     data class BooleanResult(
         override val key: Any,
@@ -40,7 +40,7 @@ sealed class EasyFormsResult(
      * Default class to handle [ToggleableState] result from ex: [TriStateCheckbox].
      * @param key a unique identifier for this state.
      * @param easyFormsErrorState the current [EasyFormsErrorState] this state has.
-     * @param value the [ToggleableState] value.
+     * @param value the [ToggleableState] of [TriStateCheckbox].
      */
     data class ToggleableStateResult(
         override val key: Any,
@@ -52,7 +52,7 @@ sealed class EasyFormsResult(
      * Default class to handle [Float] result from ex: [Slider].
      * @param key a unique identifier for this state.
      * @param easyFormsErrorState the current [EasyFormsErrorState] this state has.
-     * @param value the [Float] value.
+     * @param value the [Slider] position.
      */
     data class SliderStateResult(
         override val key: Any,
@@ -64,7 +64,7 @@ sealed class EasyFormsResult(
      * Default class to handle [ClosedFloatingPointRange] result from ex: [RangeSlider].
      * @param key a unique identifier for this state.
      * @param easyFormsErrorState the current [EasyFormsErrorState] this state has.
-     * @param value the [ClosedFloatingPointRange] value.
+     * @param value the [ClosedFloatingPointRange] of [RangeSlider].
      */
     data class RangeSliderStateResult(
         override val key: Any,
