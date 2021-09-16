@@ -52,14 +52,9 @@ android {
 dependencies {
 
     implementation(AndroidXDependencies.CORE_KTX)
-    implementation(AndroidXDependencies.APPCOMPAT)
-    implementation(AndroidXDependencies.MATERIAL)
-    implementation(AndroidXDependencies.LIFECYCLE_KTX)
     implementation(ComposeDependencies.COMPOSE_UI)
     implementation(ComposeDependencies.COMPOSE_MATERIAL)
-    implementation(ComposeDependencies.COMPOSE_MATERIAL_ICONS)
     implementation(ComposeDependencies.COMPOSE_TOOLING_PREVIEW)
-    implementation(ComposeDependencies.COMPOSE_ACTIVITY)
 
     debugImplementation(ComposeDependencies.COMPOSE_UI_TOOLING)
 
