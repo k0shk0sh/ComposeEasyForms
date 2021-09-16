@@ -59,7 +59,8 @@ class LibVersionPlugin : Plugin<Project> {
         project: Project,
         libFile: LibVersion,
     ) {
-        project.version = libFile.getLibVersion()
+        val version = libFile.getLibVersion()
+        project.version = version
+        project.extensions.extraProperties.set("VERSION_NAME", version)
     }
-
 }

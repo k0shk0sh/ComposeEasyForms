@@ -8,11 +8,12 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
     if: |
       github.repository == 'k0shk0sh/ComposeEasyForms' &&
       github.event.pull_request.merged == true &&
       contains(github.event.pull_request.labels.*.name, 'release')
+
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -22,6 +23,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
+      - name: Bump minor version
+        run: ./gradlew nextMinor
 
       - name: Upload release
         run: ./gradlew publish --no-daemon --no-parallel
@@ -37,15 +41,10 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
 
-      - name: Update Docs
-        run: ./gradlew :easyforms:dokkaHtml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Github Release
-        run: ./gradlew nextMinor githubRelease
-
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Github Release
+        run: ./gradlew githubRelease
