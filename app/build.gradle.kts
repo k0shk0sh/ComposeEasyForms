@@ -4,6 +4,10 @@ plugins {
     id(AppPlugins.KOTLIN_PARCELIZE)
 }
 
+kotlin {
+    explicitApi()
+}
+
 android {
     compileSdk = AppConfig.COMPILE_SDK
 
@@ -40,6 +44,7 @@ android {
 }
 
 dependencies {
+//    implementation("com.github.k0shk0sh:compose-easyforms:<version>")
     implementation(project(":easyforms"))
     implementation(AndroidXDependencies.CORE_KTX)
     implementation(AndroidXDependencies.APPCOMPAT)

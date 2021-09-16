@@ -1,68 +1,185 @@
-
 ![build-status](https://github.com/k0shk0sh/ComposeEasyForms/actions/workflows/build.yml/badge.svg) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.k0shk0sh/compose-easyforms/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.k0shk0sh/compose-easyforms)
 
 # Compose EasyForms
+
 Focus on building your form UI while the library do the heavy work for you.
 
 ## Features
 
-### Out of the box EasyForms support below Compose widgets:
-- TextField
-- Checkbox
-- TriStateCheckbox
-- RadioButton
-- Switch
-- Slider
-- RangeSlider
-- Your own custom widget state handler
+### Built in support for most of the Form widgets in Compose
 
-### Out of the box EasyForms provide TextField validation:
+- [TextField](#TextField)
+- [Checkbox](#Checkbox)
+- [TriStateCheckbox](#TriStateCheckbox)
+- [RadioButton](#RadioButton)
+- [Switch](#Switch)
+- [Slider](#Slider)
+- [RangeSlider](#RangeSlider)
+- [Create your own](#CustomState)
+- [Obsever Form state](#ObserveState)
+
+## Examples
+
+##### TextField
+
+EasyForms provide some of the commom used textfields validation:
+
 - Email validation
-- Password validation
-- Phone validation
-- URL validation
-- Name validation
-- Cards validation
-- Your own custom validator
-
-## Download
-
-```kotlin
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation("com.github.k0shk0sh:compose-easyforms:<version>")
-}
-```
-
-## Example
-
-### How to use:
-
-Define `val easyForms = EasyForms()` in your ViewModel or in your Activity/Fragment upper in UI tree to prevent reinitializing the object.
-
-> You should have always one instance of `EasyForms` per Screen.
-
-**TextField example with Email validation:**
 
 ```kotlin
 @Composable
 fun EmailTextField(easyForms: EasyForms) {
-    val emailTextFieldState = easyForms.getTextFieldState(MyFormKeys.EMAIL, EmailValidationType)
-    val emailState = emailTextFieldState.rememberSaveable()
+    val textFieldState = easyForms.getTextFieldState(
+        key = MyFormKeys.EMAIL,
+        easyFormsValidationType = EmailValidationType,
+        defaultValue = "",
+    )
+    val state = textFieldState.rememberSaveable()
     TextField(
-        value = emailState.value,
-        onValueChange = emailTextFieldState.onValueChangedCallback,
-        isError = emailTextFieldState.errorState.value == EasyFormsErrorState.INVALID,
+        value = state.value,
+        onValueChange = textFieldState.onValueChangedCallback,
+        isError = textFieldState.errorState.value == EasyFormsErrorState.INVALID,
     )
 }
 ```
 
-**Checkbox example**
+- Password validation
+
 ```kotlin
-@Composable  
+@Composable
+fun PasswordTextField(easyForms: EasyForms) {
+    val textFieldState = easyForms.getTextFieldState(
+        key = MyFormKeys.PASSWORD,
+        easyFormsValidationType = PasswordValidationType,
+        defaultValue = "",
+    )
+    val state = textFieldState.rememberSaveable()
+    TextField(
+        value = state.value,
+        onValueChange = textFieldState.onValueChangedCallback,
+        isError = textFieldState.errorState.value == EasyFormsErrorState.INVALID,
+    )
+}
+```
+
+- Phone validation
+
+```kotlin
+@Composable
+fun PhoneTextField(easyForms: EasyForms) {
+    val textFieldState = easyForms.getTextFieldState(
+        key = MyFormKeys.PHONE,
+        easyFormsValidationType = PhoneValidationType,
+        defaultValue = "",
+    )
+    val state = textFieldState.rememberSaveable()
+    TextField(
+        value = state.value,
+        onValueChange = textFieldState.onValueChangedCallback,
+        isError = textFieldState.errorState.value == EasyFormsErrorState.INVALID,
+    )
+}
+```
+
+- URL validation
+
+```kotlin
+@Composable
+fun UrlTextField(easyForms: EasyForms) {
+    val textFieldState = easyForms.getTextFieldState(
+        key = MyFormKeys.URL,
+        easyFormsValidationType = UrlValidationType,
+        defaultValue = "",
+    )
+    val state = textFieldState.rememberSaveable()
+    TextField(
+        value = state.value,
+        onValueChange = textFieldState.onValueChangedCallback,
+        isError = textFieldState.errorState.value == EasyFormsErrorState.INVALID,
+    )
+}
+```
+
+- Name validation
+
+```kotlin
+@Composable
+fun NameTextField(easyForms: EasyForms) {
+    val textFieldState = easyForms.getTextFieldState(
+        key = MyFormKeys.NAME,
+        easyFormsValidationType = NameValidationType,
+        defaultValue = "",
+    )
+    val state = textFieldState.rememberSaveable()
+    TextField(
+        value = state.value,
+        onValueChange = textFieldState.onValueChangedCallback,
+        isError = textFieldState.errorState.value == EasyFormsErrorState.INVALID,
+    )
+}
+```
+
+- Cards validation
+
+```kotlin
+@Composable
+fun CardTextField(easyForms: EasyForms) {
+    val textFieldState = easyForms.getTextFieldState(
+        key = MyFormKeys.CARD,
+        easyFormsValidationType = CardValidationType,
+        defaultValue = "",
+    )
+    val state = textFieldState.rememberSaveable()
+    TextField(
+        value = state.value,
+        onValueChange = textFieldState.onValueChangedCallback,
+        isError = textFieldState.errorState.value == EasyFormsErrorState.INVALID,
+    )
+}
+```
+
+Custom Validation:
+
+- You can provide your own validator for EasyForms to use, for example you could provide a custom
+  regex only, a min and/or max length only or combine them all together and EasyForms will ensure the
+  validity based on your configuration.
+
+```kotlin
+object MyCustomValidationType : EasyFormsValidationType(
+    regex = "MyAwesomeRegex",
+    minLength = 10,
+    maxLength = 30,
+)
+
+object MyCustomRegexValidationType : EasyFormsValidationType(
+    regex = "MyAwesomeRegex"
+)
+
+object MyCustomLengthValidationType : EasyFormsValidationType(
+    minLength = 20,
+    maxLength = 50,
+)
+```
+
+To use your custom validation:
+
+```kotlin
+@Composable
+fun MyTextField(easyForms: EasyForms) {
+    val textFieldState = easyForms.getTextFieldState(MyFormKeys.MY_KEY, MyCustomValidationType)
+    val state = textFieldState.rememberSaveable()
+    TextField(
+        value = state.value,
+        onValueChange = textFieldState.onValueChangedCallback,
+        isError = textFieldState.errorState.value == EasyFormsErrorState.INVALID,
+    )
+}
+```
+
+##### Checkbox
+
+```kotlin
+@Composable
 fun CheckboxLayout(easyForms: EasyForms) {
     val checkboxState = easyForms.getCheckboxState(
         MyFormKeys.CHECKBOX,
@@ -76,10 +193,110 @@ fun CheckboxLayout(easyForms: EasyForms) {
     )
 }
 ```
-**CTA state handling example**
+
+##### TriStateCheckbox
 
 ```kotlin
-@Composable 
+@Composable
+fun TriCheckboxLayout(easyForms: EasyForms) {
+    val checkboxState = easyForms.getTriCheckboxState(
+        MyFormKeys.TRI_CHECKBOX,
+        defaultValue = ToggleableState.Indeterminate,
+        isRequired = true,
+    )
+    val checkedState = checkboxState.rememberSaveable()
+    TriStateCheckbox(
+        state = checkedState.value,
+        onClick = checkboxState.onClick,
+    )
+}
+```
+
+##### RadioButton
+
+```kotlin
+@Composable
+fun RadioButtonLayout(easyForms: EasyForms) {
+    val radioButtonState = easyForms.getRadioButtonState(
+        MyFormKeys.RADIO_BUTTON,
+        defaultValue = false,
+        isRequired = true,
+    )
+    val checkedState = radioButtonState.rememberSaveable()
+    RadioButton(
+        state = checkedState.value,
+        onClick = radioButtonState.onClick,
+    )
+}
+```
+
+##### Switch
+
+```kotlin
+@Composable
+fun SwitchLayout(easyForms: EasyForms) {
+    val switchState = easyForms.getSwitchState(
+        MyFormKeys.SWITCH,
+        defaultValue = false,
+        isRequired = true,
+    )
+    val checkedState = switchState.rememberSaveable()
+    Checkbox(
+        checked = checkedState.value,
+        onCheckedChange = switchState.onValueChangedCallback,
+    )
+}
+```
+
+##### Slider
+
+```kotlin
+@Composable
+fun SliderLayout(easyForms: EasyForms) {
+    val state = easyForms.getSliderState(
+        key = MyFormKeys.SLIDER,
+        defaultValue = 0F,
+        isRequired = true,
+    )
+    val sliderPosition = state.rememberSaveable()
+    Slider(
+        value = sliderPosition.value,
+        onValueChange = state.onValueChangedCallback,
+        onValueChangeFinished = state.onValueChangeFinished,
+    )
+}
+```
+
+##### RangeSlider
+
+```kotlin
+@Composable
+fun RangeSliderLayout(easyForms: EasyForms) {
+    val state = easyForms.getRangeSliderState(
+        key = MyFormKeys.RANGE_SLIDER,
+        defaultValue = 0F..0F,
+        isRequired = true
+    )
+    val sliderPosition = state.rememberSaveable()
+    RangeSlider(
+        value = sliderPosition.value,
+        onValueChange = state.onValueChangedCallback,
+        onValueChangeFinished = state.onValueChangeFinished,
+    )
+}
+```
+
+##### CustomState
+
+You can use one of the already defined `EasyFormsState` for most cases, however when you need
+something that `EasyFormsState` doesn't provide then you could simply create your own. Please
+follow [this link](https://github.com/k0shk0sh/ComposeEasyForms/blob/main/app/src/main/java/com/github/k0shk0sh/compose/easyforms/example/ui/components/Dropdown.kt#L22)
+for more details.
+
+##### ObserveState
+
+```kotlin
+@Composable
 fun LoginButton(
     easyForms: EasyForms,
     onClick: () -> Unit,
@@ -89,7 +306,7 @@ fun LoginButton(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
         enabled = errorStates.value.all {
-            it.value == EasyFormsErrorState.VALID 
+            it.value == EasyFormsErrorState.VALID
         }
     ) {
         Text("Submit")
@@ -97,9 +314,21 @@ fun LoginButton(
 }
 ```
 
-> For more examples with all widgets and how to create your own custom states handler please refer to the project example.
+> For more example please refer to the example app.
 
+## Download
+
+```kotlin
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.github.k0shk0sh:compose-easyforms:<version>")
+}
+```
 
 ## Contributions
-Please contribute! We will gladly review any pull requests.
-Make sure to read the [Contributing](.github/CONTRIBUTING.md) page first though.
+
+Please contribute! We will gladly review any pull requests. Make sure to read
+the [Contributing](.github/CONTRIBUTING.md) page first though.

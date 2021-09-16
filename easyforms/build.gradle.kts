@@ -4,6 +4,10 @@ plugins {
     id(AppPlugins.DOKKA)
 }
 
+kotlin {
+    explicitApi()
+}
+
 android {
     compileSdk = AppConfig.COMPILE_SDK
 
