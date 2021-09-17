@@ -235,12 +235,18 @@ class EasyForms internal constructor(
     fun formData() = forms.map { it.value.mapToResult(it.key) }
 }
 
+/**
+ * [EasyForms] key identifier for the current composable
+ */
+private const val EASY_FORMS_KEY = "EasyFormsKey"
+
 @Composable
 fun BuildEasyForms(
+    key: Any = EASY_FORMS_KEY,
     content: @Composable (easyForms: EasyForms) -> Unit,
 ) {
     val stateHandle = LocalSaveableStateRegistry.current
-    val easyForms = remember { EasyForms(stateHandle) }
+    val easyForms = remember(key1 = key) { EasyForms(stateHandle) }
     content.invoke(easyForms)
     SideEffect {
         easyForms.restoreState()
