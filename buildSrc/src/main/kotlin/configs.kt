@@ -96,4 +96,6 @@ object AndroidTestDependencies {
         "androidx.test.espresso:espresso-core:${DependenciesVersion.ESPRESSO_CORE_VERSION}"
     const val COMPOSE_UI_TEST =
         "androidx.compose.ui:ui-test-junit4:${DependenciesVersion.COMPOSE_VERSION}"
+    const val COMPOSE_MANIFEST =
+        "androidx.compose.ui:ui-test-manifest:${DependenciesVersion.COMPOSE_VERSION}"
 }

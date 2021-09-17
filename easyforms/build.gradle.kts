@@ -40,7 +40,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = DependenciesVersion.COMPOSE_VERSION
     }
-
+    packagingOptions {
+        resources.excludes.add("/META-INF/AL2.0")
+        resources.excludes.add("/META-INF/LGPL2.1")
+    }
     testOptions {
         unitTests {
             isReturnDefaultValues = true
@@ -65,6 +68,8 @@ dependencies {
     androidTestImplementation(AndroidTestDependencies.EXT_JUNIT)
     androidTestImplementation(AndroidTestDependencies.ESPRESSO_CORE)
     androidTestImplementation(AndroidTestDependencies.COMPOSE_UI_TEST)
+
+    debugImplementation(AndroidTestDependencies.COMPOSE_MANIFEST)
 }
 
 apply { plugin(AppPlugins.PUBLISH_PLUGIN) }
