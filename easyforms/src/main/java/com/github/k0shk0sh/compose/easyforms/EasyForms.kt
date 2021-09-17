@@ -1,7 +1,5 @@
 package com.github.k0shk0sh.compose.easyforms
 
-import android.util.Log
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -9,9 +7,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
-import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.state.ToggleableState
-import androidx.lifecycle.SavedStateHandle
 
 /**
  * A class that manage all your forms states.
@@ -31,11 +27,8 @@ class EasyForms(
      * Restores all saved instances of form fields.
      */
     internal fun restoreState() {
-        Log.e("called", "restore")
         easyFormsRestorationHandler.restoreFormData { bundle ->
-            Log.e("bundle", "is: $bundle and ${forms.size}")
             forms.onEach { (key, value) ->
-                Log.e("keyBundle", "${bundle.getBundle(key.toString())}")
                 bundle.getBundle(key.toString())?.let { value.restoreState(it) }
             }
         }
