@@ -13,7 +13,7 @@ import androidx.compose.ui.state.ToggleableState
  * A class that manage all your forms states.
  * Always create one instance per ViewModel or Compose screen.
  */
-class EasyForms(
+class EasyForms internal constructor(
     savedStateHandle: SaveableStateRegistry? = null,
 ) {
     private val easyFormsRestorationHandler = EasyFormsRestorationHandler(savedStateHandle)
@@ -237,7 +237,7 @@ class EasyForms(
 
 @Composable
 fun BuildEasyForms(
-    content: @Composable EasyForms.() -> Unit,
+    content: @Composable (easyForms: EasyForms) -> Unit,
 ) {
     val stateHandle = LocalSaveableStateRegistry.current
     val easyForms = remember { EasyForms(stateHandle) }

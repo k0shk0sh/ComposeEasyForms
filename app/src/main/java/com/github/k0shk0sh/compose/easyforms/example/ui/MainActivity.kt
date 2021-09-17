@@ -52,8 +52,7 @@ private fun EasyForm(
             )
         }
     ) {
-        BuildEasyForms {
-            val easyForm = this
+        BuildEasyForms { easyForm ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -95,7 +94,7 @@ private fun EasyForm(
                 SmallText("RangeSlider")
                 RangeSliderLayout(easyForm)
                 Space(34.dp)
-                LoginButton(easyForm, onClick = { onButtonClicked.invoke(this@BuildEasyForms) })
+                LoginButton(easyForm, onClick = { onButtonClicked.invoke(easyForm) })
             }
         }
     }

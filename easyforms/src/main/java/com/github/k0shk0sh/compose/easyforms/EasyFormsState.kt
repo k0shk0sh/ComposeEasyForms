@@ -1,18 +1,13 @@
 package com.github.k0shk0sh.compose.easyforms
 
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.CallSuper
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.state.ToggleableState
-import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.TextFieldValue
 
 /**
@@ -45,11 +40,19 @@ abstract class EasyFormsState<ST, CT> {
      */
     abstract fun mapToResult(key: Any): EasyFormsResult
 
+    /**
+     * Each [Bundle] is tied to your [EasyFormsState] unique key.
+     * @param bundle this is the [Bundle] that will be saved into savedInstance.
+     */
     @CallSuper
     open fun saveState(bundle: Bundle) {
         bundle.putSerializable("error", errorState.value)
     }
 
+    /**
+     * Each [Bundle] is tied to your [EasyFormsState] unique key.
+     * @param bundle the [Bundle] loaded from restoreInstance.
+     */
     @CallSuper
     open fun restoreState(bundle: Bundle) {
         errorState.value = bundle.getSerializable("error") as EasyFormsErrorState

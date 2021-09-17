@@ -8,6 +8,10 @@ internal class EasyFormsRestorationHandler(
     private val savedStateHandle: SaveableStateRegistry? = null,
 ) {
 
+    /**
+     * Save each [EasyFormsState] state into a [Bundle] on its own with its unique identifier.
+     * It will call each [EasyFormsState.saveState].
+     */
     fun saveFormData(
         callback: () -> Map<Any, EasyFormsState<*, *>>,
     ) {
@@ -22,6 +26,10 @@ internal class EasyFormsRestorationHandler(
         }
     }
 
+    /**
+     * Restore each [EasyFormsState] saved state [Bundle] and it will
+     * call each [EasyFormsState.restoreState].
+     */
     fun restoreFormData(
         bundleCallback: (Bundle) -> Unit,
     ) {
@@ -30,6 +38,7 @@ internal class EasyFormsRestorationHandler(
         }
     }
 
+    @Suppress
     companion object {
         private const val BUNDLE_KEY = "easyforms_bundle_key"
     }
