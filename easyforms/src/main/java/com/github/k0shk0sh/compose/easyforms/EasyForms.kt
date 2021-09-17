@@ -240,12 +240,22 @@ class EasyForms internal constructor(
  */
 private const val EASY_FORMS_KEY = "EasyFormsKey"
 
+/**
+ * Please be aware that [BuildEasyForms] should be called as parent of your forms UI tree and
+ * not as a top parent of your whole tree.
+ * @sample com.github.k0shk0sh.compose.easyforms.example.ui.EasyForm
+ * @param key the unique identifier for this instance of [EasyForms].
+ * @param saveableStateRegistry the [SaveableStateRegistry] that will be used to save & restore
+ * [EasyForms] fields state, by default [LocalSaveableStateRegistry] is used.
+ * @param content your composable layout.
+ */
 @Composable
 fun BuildEasyForms(
     key: Any = EASY_FORMS_KEY,
+    saveableStateRegistry: SaveableStateRegistry? = null,
     content: @Composable (easyForms: EasyForms) -> Unit,
 ) {
-    val stateHandle = LocalSaveableStateRegistry.current
+    val stateHandle = saveableStateRegistry ?: LocalSaveableStateRegistry.current
     val easyForms = remember(key1 = key) { EasyForms(stateHandle) }
     content.invoke(easyForms)
     SideEffect {
