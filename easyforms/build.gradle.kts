@@ -52,6 +52,7 @@ android {
 dependencies {
 
     implementation(AndroidXDependencies.CORE_KTX)
+    implementation(AndroidXDependencies.SAVED_STATE)
     implementation(ComposeDependencies.COMPOSE_UI)
     implementation(ComposeDependencies.COMPOSE_MATERIAL)
     implementation(ComposeDependencies.COMPOSE_TOOLING_PREVIEW)

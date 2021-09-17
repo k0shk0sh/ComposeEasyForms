@@ -1,18 +1,52 @@
 package com.github.k0shk0sh.compose.easyforms
 
+import android.util.Log
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
+import androidx.compose.runtime.saveable.SaveableStateRegistry
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.state.ToggleableState
+import androidx.lifecycle.SavedStateHandle
 
 /**
  * A class that manage all your forms states.
  * Always create one instance per ViewModel or Compose screen.
  */
-class EasyForms {
+class EasyForms(
+    savedStateHandle: SaveableStateRegistry? = null,
+) {
+    private val easyFormsRestorationHandler = EasyFormsRestorationHandler(savedStateHandle)
+
     /**
      * A map that holds all [EasyFormsState].
      */
     private val forms = mutableMapOf<Any, EasyFormsState<*, *>>()
+
+    /**
+     * Restores all saved instances of form fields.
+     */
+    internal fun restoreState() {
+        Log.e("called", "restore")
+        easyFormsRestorationHandler.restoreFormData { bundle ->
+            Log.e("bundle", "is: $bundle and ${forms.size}")
+            forms.onEach { (key, value) ->
+                Log.e("keyBundle", "${bundle.getBundle(key.toString())}")
+                bundle.getBundle(key.toString())?.let { value.restoreState(it) }
+            }
+        }
+    }
+
+    /**
+     * Saves all instances of form fields.
+     */
+    internal fun saveState() {
+        easyFormsRestorationHandler.saveFormData { forms }
+    }
 
     /**
      * Create or Get a state that handle [TextField].
@@ -206,4 +240,17 @@ class EasyForms {
      * @return All form filed data as in list of [EasyFormsResult].
      */
     fun formData() = forms.map { it.value.mapToResult(it.key) }
+}
+
+@Composable
+fun BuildEasyForms(
+    content: @Composable EasyForms.() -> Unit,
+) {
+    val stateHandle = LocalSaveableStateRegistry.current
+    val easyForms = remember { EasyForms(stateHandle) }
+    content.invoke(easyForms)
+    SideEffect {
+        easyForms.restoreState()
+        easyForms.saveState()
+    }
 }
