@@ -46,7 +46,7 @@ abstract class EasyFormsState<ST, CT> {
      */
     @CallSuper
     open fun saveState(bundle: Bundle) {
-        bundle.putSerializable("error", errorState.value)
+        bundle.putSerializable(ERROR_KEY, errorState.value)
     }
 
     /**
@@ -55,7 +55,13 @@ abstract class EasyFormsState<ST, CT> {
      */
     @CallSuper
     open fun restoreState(bundle: Bundle) {
-        errorState.value = bundle.getSerializable("error") as EasyFormsErrorState
+        errorState.value = bundle.getSerializable(ERROR_KEY) as EasyFormsErrorState
+    }
+
+    @Suppress
+    companion object {
+        private const val ERROR_KEY = "error"
+        internal const val VALUE_KEY = "value"
     }
 }
 
@@ -91,12 +97,12 @@ data class EasyFormsTextFieldState(
 
     override fun saveState(bundle: Bundle) {
         super.saveState(bundle)
-        bundle.putString("value", _state.value.text)
+        bundle.putString(VALUE_KEY, _state.value.text)
     }
 
     override fun restoreState(bundle: Bundle) {
         super.restoreState(bundle)
-        _state.value = TextFieldValue(bundle.getString("value", defaultValue))
+        _state.value = TextFieldValue(bundle.getString(VALUE_KEY, defaultValue))
     }
 
     private fun isValid(value: String): EasyFormsErrorState {
@@ -142,12 +148,12 @@ data class EasyFormsCheckboxState(
 
     override fun saveState(bundle: Bundle) {
         super.saveState(bundle)
-        bundle.putBoolean("value", _state.value)
+        bundle.putBoolean(VALUE_KEY, _state.value)
     }
 
     override fun restoreState(bundle: Bundle) {
         super.restoreState(bundle)
-        _state.value = bundle.getBoolean("value", defaultValue)
+        _state.value = bundle.getBoolean(VALUE_KEY, defaultValue)
     }
 }
 
@@ -200,12 +206,12 @@ data class EasyFormsTriCheckboxState(
 
     override fun saveState(bundle: Bundle) {
         super.saveState(bundle)
-        bundle.putSerializable("value", state.value)
+        bundle.putSerializable(VALUE_KEY, state.value)
     }
 
     override fun restoreState(bundle: Bundle) {
         super.restoreState(bundle)
-        _state.value = bundle.getSerializable("value") as ToggleableState
+        _state.value = bundle.getSerializable(VALUE_KEY) as ToggleableState
     }
 }
 
@@ -255,12 +261,12 @@ data class EasyFormsRadioButtonState(
 
     override fun saveState(bundle: Bundle) {
         super.saveState(bundle)
-        bundle.putBoolean("value", _state.value)
+        bundle.putBoolean(VALUE_KEY, _state.value)
     }
 
     override fun restoreState(bundle: Bundle) {
         super.restoreState(bundle)
-        _state.value = bundle.getBoolean("value", defaultValue)
+        _state.value = bundle.getBoolean(VALUE_KEY, defaultValue)
     }
 }
 
@@ -298,12 +304,12 @@ data class EasyFormsSwitchState(
 
     override fun saveState(bundle: Bundle) {
         super.saveState(bundle)
-        bundle.putBoolean("value", _state.value)
+        bundle.putBoolean(VALUE_KEY, _state.value)
     }
 
     override fun restoreState(bundle: Bundle) {
         super.restoreState(bundle)
-        _state.value = bundle.getBoolean("value", defaultValue)
+        _state.value = bundle.getBoolean(VALUE_KEY, defaultValue)
     }
 }
 
@@ -348,12 +354,12 @@ data class EasyFormsSliderState(
 
     override fun saveState(bundle: Bundle) {
         super.saveState(bundle)
-        bundle.putFloat("value", _state.value)
+        bundle.putFloat(VALUE_KEY, _state.value)
     }
 
     override fun restoreState(bundle: Bundle) {
         super.restoreState(bundle)
-        _state.value = bundle.getFloat("value", defaultValue)
+        _state.value = bundle.getFloat(VALUE_KEY, defaultValue)
     }
 }
 
@@ -401,16 +407,22 @@ data class EasyFormsRangeSliderState(
 
     override fun saveState(bundle: Bundle) {
         super.saveState(bundle)
-        bundle.putFloat("start", _state.value.start)
-        bundle.putFloat("end", _state.value.endInclusive)
+        bundle.putFloat(START_KEY, _state.value.start)
+        bundle.putFloat(END_KEY, _state.value.endInclusive)
     }
 
     override fun restoreState(bundle: Bundle) {
         super.restoreState(bundle)
         _state.value = bundle.getFloat(
-            "start", defaultValue.start,
+            START_KEY, defaultValue.start,
         )..bundle.getFloat(
-            "end", defaultValue.endInclusive,
+            END_KEY, defaultValue.endInclusive,
         )
+    }
+
+    @Suppress
+    companion object {
+        private const val START_KEY = "start"
+        private const val END_KEY = "end"
     }
 }
