@@ -32,6 +32,7 @@ object AppPlugins {
     const val DOKKA = "org.jetbrains.dokka"
     const val PUBLISH_PLUGIN = "com.vanniktech.maven.publish"
     const val GITHUB_RELEASE = "com.github.breadmoirai.github-release"
+    const val EASY_VERSION = "com.github.k0shk0sh.easy.version"
     const val AGP = "com.android.tools.build:gradle:${DependenciesVersion.AGP_VERSION}"
     const val KGP = "org.jetbrains.kotlin:kotlin-gradle-plugin:${DependenciesVersion.KGP_VERSION}"
     const val PUBLISH = "com.vanniktech:gradle-maven-publish-plugin:${DependenciesVersion.PUBLISH_VERSION}"
@@ -54,6 +55,7 @@ object DependenciesVersion {
     const val PUBLISH_VERSION = "0.18.0"
     const val GITHUB_RELEASE_VERSION = "2.2.12"
     const val SAVED_STATE_VERSION = "2.3.1"
+    const val EASY_VERSION = "0.1.0"
 }
 
 object ComposeDependencies {
