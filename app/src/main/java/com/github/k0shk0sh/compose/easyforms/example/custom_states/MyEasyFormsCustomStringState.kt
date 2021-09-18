@@ -1,16 +1,18 @@
 package com.github.k0shk0sh.compose.easyforms.example.custom_states
 
+import android.os.Bundle
 import androidx.compose.runtime.*
 import com.github.k0shk0sh.compose.easyforms.EasyFormsErrorState
 import com.github.k0shk0sh.compose.easyforms.EasyFormsResult
 import com.github.k0shk0sh.compose.easyforms.EasyFormsState
 
 class MyEasyFormsCustomStringState(
-    defaultValue: String = "",
+    private val defaultValue: String = "",
     private val validData: List<String>,
 ) : EasyFormsState<MutableState<String>, String>() {
 
     private val _isOpen = mutableStateOf(false)
+    val isOpen: State<Boolean> = _isOpen
 
     val onDismissed: () -> Unit = {
         _isOpen.value = false
@@ -39,16 +41,16 @@ class MyEasyFormsCustomStringState(
         )
     }
 
-    @Composable
-    fun rememberSaveable(): MutableState<String> {
-        return androidx.compose.runtime.saveable.rememberSaveable {
-            state
-        }
+    override fun saveState(bundle: Bundle) {
+        super.saveState(bundle)
+        bundle.putString("value", state.value)
+        bundle.putBoolean("open", _isOpen.value)
     }
 
-    @Composable
-    fun rememberOpen(): State<Boolean> {
-        return remember { _isOpen }
+    override fun restoreState(bundle: Bundle) {
+        super.restoreState(bundle)
+        state.value = bundle.getString("value", defaultValue)
+        _isOpen.value = bundle.getBoolean("open", false)
     }
 }
 

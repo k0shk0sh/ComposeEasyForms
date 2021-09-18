@@ -53,6 +53,7 @@ object DependenciesVersion {
     const val DOKKA_VERSION = "1.5.0"
     const val PUBLISH_VERSION = "0.18.0"
     const val GITHUB_RELEASE_VERSION = "2.2.12"
+    const val SAVED_STATE_VERSION = "2.3.1"
 }
 
 object ComposeDependencies {
@@ -79,6 +80,8 @@ object AndroidXDependencies {
         "com.google.android.material:material:${DependenciesVersion.MATERIAL_VERSION}"
     const val LIFECYCLE_KTX =
         "androidx.lifecycle:lifecycle-runtime-ktx:${DependenciesVersion.LIFECYCLE_KTX_VERSION}"
+    const val SAVED_STATE =
+        "androidx.lifecycle:lifecycle-viewmodel-savedstate:${DependenciesVersion.SAVED_STATE_VERSION}"
 }
 
 object UnitTestDependencies {
@@ -93,4 +96,6 @@ object AndroidTestDependencies {
         "androidx.test.espresso:espresso-core:${DependenciesVersion.ESPRESSO_CORE_VERSION}"
     const val COMPOSE_UI_TEST =
         "androidx.compose.ui:ui-test-junit4:${DependenciesVersion.COMPOSE_VERSION}"
+    const val COMPOSE_MANIFEST =
+        "androidx.compose.ui:ui-test-manifest:${DependenciesVersion.COMPOSE_VERSION}"
 }

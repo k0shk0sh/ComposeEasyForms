@@ -1,18 +1,45 @@
 package com.github.k0shk0sh.compose.easyforms
 
 import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
+import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.ui.state.ToggleableState
 
 /**
  * A class that manage all your forms states.
  * Always create one instance per ViewModel or Compose screen.
  */
-class EasyForms {
+class EasyForms internal constructor(
+    savedStateHandle: SaveableStateRegistry? = null,
+) {
+    private val easyFormsRestorationHandler = EasyFormsRestorationHandler(savedStateHandle)
+
     /**
      * A map that holds all [EasyFormsState].
      */
     private val forms = mutableMapOf<Any, EasyFormsState<*, *>>()
+
+    /**
+     * Restores all saved instances of form fields.
+     */
+    internal fun restoreState() {
+        easyFormsRestorationHandler.restoreFormData { bundle ->
+            forms.onEach { (key, value) ->
+                bundle.getBundle(key.toString())?.let { value.restoreState(it) }
+            }
+        }
+    }
+
+    /**
+     * Saves all instances of form fields.
+     */
+    internal fun saveState() {
+        easyFormsRestorationHandler.saveFormData { forms }
+    }
 
     /**
      * Create or Get a state that handle [TextField].
@@ -206,4 +233,33 @@ class EasyForms {
      * @return All form filed data as in list of [EasyFormsResult].
      */
     fun formData() = forms.map { it.value.mapToResult(it.key) }
+}
+
+/**
+ * [EasyForms] key identifier for the current composable.
+ */
+private const val EASY_FORMS_KEY = "EasyFormsKey"
+
+/**
+ * Please be aware that [BuildEasyForms] should be called as parent of your forms UI tree and
+ * not as a top parent of your whole tree.
+ * @sample com.github.k0shk0sh.compose.easyforms.example.ui.EasyForm
+ * @param key the unique identifier for this instance of [EasyForms].
+ * @param saveableStateRegistry the [SaveableStateRegistry] that will be used to save & restore
+ * [EasyForms] fields state, by default [LocalSaveableStateRegistry] is used.
+ * @param content your composable layout.
+ */
+@Composable
+fun BuildEasyForms(
+    key: Any = EASY_FORMS_KEY,
+    saveableStateRegistry: SaveableStateRegistry? = null,
+    content: @Composable (easyForms: EasyForms) -> Unit,
+) {
+    val stateHandle = saveableStateRegistry ?: LocalSaveableStateRegistry.current
+    val easyForms = remember(key1 = key) { EasyForms(stateHandle) }
+    content.invoke(easyForms)
+    SideEffect {
+        easyForms.restoreState()
+        easyForms.saveState()
+    }
 }

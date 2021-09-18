@@ -22,7 +22,7 @@ fun CheckboxLayout(easyForm: EasyForms) {
             defaultValue = false,
             isRequired = true,
         )
-        val checkedState = checkboxState.rememberSaveable()
+        val checkedState = checkboxState.state
         Checkbox(
             checked = checkedState.value,
             onCheckedChange = checkboxState.onValueChangedCallback,
@@ -52,7 +52,7 @@ fun ListCustomCheckboxLayout(
                 isRequired = true,
             )
         )
-        val checkedState = state.rememberSaveable()
+        val checkedState = state.state
         Row {
             checkedState.forEach { checkboxModel ->
                 Checkbox(
@@ -83,7 +83,7 @@ fun SwitchLayout(easyForm: EasyForms) {
             defaultValue = false,
             isRequired = true,
         )
-        val checkedState = state.rememberSaveable()
+        val checkedState = state.state
         Switch(
             checked = checkedState.value,
             onCheckedChange = state.onValueChangedCallback,
@@ -108,7 +108,7 @@ fun TriCheckboxLayout(easyForm: EasyForms) {
             defaultValue = ToggleableState.Indeterminate,
             isRequired = true,
         )
-        val checkedState = checkboxState.rememberSaveable()
+        val checkedState = checkboxState.state
         TriStateCheckbox(state = checkedState.value, onClick = checkboxState.onClick)
         Space(8.dp)
         val errorState = checkboxState.errorState.value
@@ -130,7 +130,7 @@ fun RadioButtonLayout(easyForm: EasyForms) {
             defaultValue = false,
             isRequired = true,
         )
-        val checkedState = radioButtonState.rememberSaveable()
+        val checkedState = radioButtonState.state
         RadioButton(
             selected = checkedState.value,
             onClick = radioButtonState.onClick,

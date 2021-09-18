@@ -1,14 +1,13 @@
 package com.github.k0shk0sh.compose.easyforms
 
+import android.os.Bundle
+import androidx.annotation.CallSuper
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.state.ToggleableState
-import androidx.compose.ui.text.*
 import androidx.compose.ui.text.input.TextFieldValue
 
 /**
@@ -40,6 +39,39 @@ abstract class EasyFormsState<ST, CT> {
      * @return a mapped object of [EasyFormsResult].
      */
     abstract fun mapToResult(key: Any): EasyFormsResult
+
+    /**
+     * Each [Bundle] is tied to your [EasyFormsState] unique key.
+     * @param bundle this is the [Bundle] that will be saved into savedInstance.
+     */
+    @CallSuper
+    open fun saveState(bundle: Bundle) {
+        bundle.putSerializable(ERROR_KEY, errorState.value)
+    }
+
+    /**
+     * Each [Bundle] is tied to your [EasyFormsState] unique key.
+     * @param bundle the [Bundle] loaded from restoreInstance.
+     */
+    @CallSuper
+    open fun restoreState(bundle: Bundle) {
+        errorState.value = bundle.getSerializable(ERROR_KEY) as EasyFormsErrorState
+    }
+
+    /**
+     * @suppress
+     */
+    companion object {
+        /**
+         * Error bundle key.
+         */
+        private const val ERROR_KEY = "error"
+
+        /**
+         * Value bundle key.
+         */
+        internal const val VALUE_KEY = "value"
+    }
 }
 
 /**
@@ -50,7 +82,7 @@ abstract class EasyFormsState<ST, CT> {
 data class EasyFormsTextFieldState(
     private val defaultValue: String = "",
     private val easyFormsValidationType: EasyFormsValidationType,
-) : EasyFormsState<MutableState<TextFieldValue>, TextFieldValue>() {
+) : EasyFormsState<State<TextFieldValue>, TextFieldValue>() {
 
     init {
         if (defaultValue.isNotBlank()) {
@@ -58,29 +90,28 @@ data class EasyFormsTextFieldState(
         }
     }
 
-    override val state: MutableState<TextFieldValue> = mutableStateOf(
-        TextFieldValue(defaultValue)
-    )
+    private val _state = mutableStateOf(TextFieldValue(defaultValue))
+    override val state: State<TextFieldValue> get() = _state
 
     override val onValueChangedCallback: (TextFieldValue) -> Unit = { value ->
-        state.value = value
-        errorState.value = isValid(state.value.text)
+        _state.value = value
+        errorState.value = isValid(value.text)
     }
 
     override fun mapToResult(key: Any): EasyFormsResult = EasyFormsResult.StringResult(
         key = key,
         easyFormsErrorState = errorState.value,
-        value = state.value.text,
+        value = _state.value.text,
     )
 
-    /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes
-     */
-    @Composable
-    fun rememberSaveable(): MutableState<TextFieldValue> {
-        return rememberSaveable(stateSaver = TextFieldValue.Saver) {
-            state
-        }
+    override fun saveState(bundle: Bundle) {
+        super.saveState(bundle)
+        bundle.putString(VALUE_KEY, _state.value.text)
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        super.restoreState(bundle)
+        _state.value = TextFieldValue(bundle.getString(VALUE_KEY, defaultValue))
     }
 
     private fun isValid(value: String): EasyFormsErrorState {
@@ -98,15 +129,17 @@ data class EasyFormsTextFieldState(
 data class EasyFormsCheckboxState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
-) : EasyFormsState<MutableState<Boolean>, Boolean>() {
+) : EasyFormsState<State<Boolean>, Boolean>() {
     init {
         if (!isRequired || defaultValue) errorState.value = EasyFormsErrorState.VALID
     }
 
-    override val state: MutableState<Boolean> = mutableStateOf(defaultValue)
+    private val _state = mutableStateOf(defaultValue)
+
+    override val state: State<Boolean> get() = _state
 
     override val onValueChangedCallback: (Boolean) -> Unit = { value ->
-        state.value = value
+        _state.value = value
         if (isRequired) {
             errorState.value = if (!value) {
                 EasyFormsErrorState.INVALID
@@ -119,17 +152,17 @@ data class EasyFormsCheckboxState(
     override fun mapToResult(key: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
         key = key,
         easyFormsErrorState = errorState.value,
-        value = state.value,
+        value = _state.value,
     )
 
-    /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes.
-     */
-    @Composable
-    fun rememberSaveable(): MutableState<Boolean> {
-        return rememberSaveable {
-            state
-        }
+    override fun saveState(bundle: Bundle) {
+        super.saveState(bundle)
+        bundle.putBoolean(VALUE_KEY, _state.value)
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        super.restoreState(bundle)
+        _state.value = bundle.getBoolean(VALUE_KEY, defaultValue)
     }
 }
 
@@ -141,14 +174,15 @@ data class EasyFormsCheckboxState(
 data class EasyFormsTriCheckboxState(
     private val defaultValue: ToggleableState = ToggleableState.Indeterminate,
     private val isRequired: Boolean = true,
-) : EasyFormsState<MutableState<ToggleableState>, Nothing>() {
+) : EasyFormsState<State<ToggleableState>, Nothing>() {
     init {
         if (!isRequired || defaultValue == ToggleableState.On) {
             errorState.value = EasyFormsErrorState.VALID
         }
     }
 
-    override val state: MutableState<ToggleableState> = mutableStateOf(defaultValue)
+    private val _state = mutableStateOf(defaultValue)
+    override val state: State<ToggleableState> get() = _state
 
     /**
      * Used instead of [onValueChangedCallback] as this widget only accepts onClick.
@@ -159,7 +193,7 @@ data class EasyFormsTriCheckboxState(
             ToggleableState.Off -> ToggleableState.On
             ToggleableState.Indeterminate -> ToggleableState.Off
         }
-        state.value = newState
+        _state.value = newState
         if (isRequired) {
             errorState.value = when (newState) {
                 ToggleableState.Off -> EasyFormsErrorState.INVALID
@@ -176,17 +210,17 @@ data class EasyFormsTriCheckboxState(
     override fun mapToResult(key: Any): EasyFormsResult = EasyFormsResult.ToggleableStateResult(
         key = key,
         easyFormsErrorState = errorState.value,
-        value = state.value,
+        value = _state.value,
     )
 
-    /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes.
-     */
-    @Composable
-    fun rememberSaveable(): MutableState<ToggleableState> {
-        return rememberSaveable {
-            state
-        }
+    override fun saveState(bundle: Bundle) {
+        super.saveState(bundle)
+        bundle.putSerializable(VALUE_KEY, state.value)
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        super.restoreState(bundle)
+        _state.value = bundle.getSerializable(VALUE_KEY) as ToggleableState
     }
 }
 
@@ -198,20 +232,21 @@ data class EasyFormsTriCheckboxState(
 data class EasyFormsRadioButtonState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
-) : EasyFormsState<MutableState<Boolean>, Nothing>() {
+) : EasyFormsState<State<Boolean>, Nothing>() {
     init {
         if (!isRequired || defaultValue) errorState.value = EasyFormsErrorState.VALID
     }
 
-    override val state: MutableState<Boolean> = mutableStateOf(defaultValue)
+    private val _state = mutableStateOf(defaultValue)
+    override val state: State<Boolean> get() = _state
 
     /**
      * Used instead of [onValueChangedCallback] as this widget only accepts onClick.
      */
     val onClick = {
-        state.value = !state.value
+        _state.value = !_state.value
         if (isRequired) {
-            errorState.value = if (!state.value) {
+            errorState.value = if (!_state.value) {
                 EasyFormsErrorState.INVALID
             } else {
                 EasyFormsErrorState.VALID
@@ -229,18 +264,18 @@ data class EasyFormsRadioButtonState(
 
     override fun mapToResult(key: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
         key = key,
-        value = state.value,
+        value = _state.value,
         easyFormsErrorState = errorState.value
     )
 
-    /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes.
-     */
-    @Composable
-    fun rememberSaveable(): MutableState<Boolean> {
-        return rememberSaveable {
-            state
-        }
+    override fun saveState(bundle: Bundle) {
+        super.saveState(bundle)
+        bundle.putBoolean(VALUE_KEY, _state.value)
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        super.restoreState(bundle)
+        _state.value = bundle.getBoolean(VALUE_KEY, defaultValue)
     }
 }
 
@@ -251,15 +286,16 @@ data class EasyFormsRadioButtonState(
 data class EasyFormsSwitchState(
     private val defaultValue: Boolean = false,
     private val isRequired: Boolean = true,
-) : EasyFormsState<MutableState<Boolean>, Boolean>() {
+) : EasyFormsState<State<Boolean>, Boolean>() {
     init {
         if (!isRequired || defaultValue) errorState.value = EasyFormsErrorState.VALID
     }
 
-    override val state: MutableState<Boolean> = mutableStateOf(defaultValue)
+    private val _state = mutableStateOf(defaultValue)
+    override val state: State<Boolean> get() = _state
 
     override val onValueChangedCallback: (Boolean) -> Unit = { value ->
-        state.value = value
+        _state.value = value
         if (isRequired) {
             errorState.value = if (!value) {
                 EasyFormsErrorState.INVALID
@@ -272,17 +308,17 @@ data class EasyFormsSwitchState(
     override fun mapToResult(key: Any): EasyFormsResult = EasyFormsResult.BooleanResult(
         key = key,
         easyFormsErrorState = errorState.value,
-        value = state.value,
+        value = _state.value,
     )
 
-    /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes.
-     */
-    @Composable
-    fun rememberSaveable(): MutableState<Boolean> {
-        return rememberSaveable {
-            state
-        }
+    override fun saveState(bundle: Bundle) {
+        super.saveState(bundle)
+        bundle.putBoolean(VALUE_KEY, _state.value)
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        super.restoreState(bundle)
+        _state.value = bundle.getBoolean(VALUE_KEY, defaultValue)
     }
 }
 
@@ -293,9 +329,16 @@ data class EasyFormsSwitchState(
 data class EasyFormsSliderState(
     private val defaultValue: Float = 0F,
     private val isRequired: Boolean = true,
-) : EasyFormsState<MutableState<Float>, Float>() {
+) : EasyFormsState<State<Float>, Float>() {
     init {
         if (!isRequired || defaultValue > 0F) errorState.value = EasyFormsErrorState.VALID
+    }
+
+    private val _state = mutableStateOf(defaultValue)
+    override val state: State<Float> get() = _state
+
+    override val onValueChangedCallback: (Float) -> Unit = {
+        _state.value = it
     }
 
     /**
@@ -303,35 +346,29 @@ data class EasyFormsSliderState(
      */
     val onValueChangeFinished: () -> Unit = {
         if (isRequired) {
-            errorState.value = when (state.value) {
+            errorState.value = when (_state.value) {
                 0F -> EasyFormsErrorState.INVALID
                 else -> EasyFormsErrorState.VALID
             }
         }
     }
 
-    override val state: MutableState<Float> = mutableStateOf(defaultValue)
-
-    override val onValueChangedCallback: (Float) -> Unit = {
-        state.value = it
-    }
-
     override fun mapToResult(key: Any): EasyFormsResult.SliderStateResult {
         return EasyFormsResult.SliderStateResult(
             key = key,
             easyFormsErrorState = errorState.value,
-            value = state.value,
+            value = _state.value,
         )
     }
 
-    /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes.
-     */
-    @Composable
-    fun rememberSaveable(): MutableState<Float> {
-        return rememberSaveable {
-            state
-        }
+    override fun saveState(bundle: Bundle) {
+        super.saveState(bundle)
+        bundle.putFloat(VALUE_KEY, _state.value)
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        super.restoreState(bundle)
+        _state.value = bundle.getFloat(VALUE_KEY, defaultValue)
     }
 }
 
@@ -343,11 +380,18 @@ data class EasyFormsSliderState(
 data class EasyFormsRangeSliderState(
     private val defaultValue: ClosedFloatingPointRange<Float> = 0F..0F,
     private val isRequired: Boolean = true,
-) : EasyFormsState<MutableState<ClosedFloatingPointRange<Float>>, ClosedFloatingPointRange<Float>>() {
+) : EasyFormsState<State<ClosedFloatingPointRange<Float>>, ClosedFloatingPointRange<Float>>() {
     init {
         if (!isRequired || (defaultValue.start > 0F || defaultValue.endInclusive > 0F)) {
             errorState.value = EasyFormsErrorState.VALID
         }
+    }
+
+    private val _state = mutableStateOf(defaultValue)
+    override val state: State<ClosedFloatingPointRange<Float>> get() = _state
+
+    override val onValueChangedCallback: (ClosedFloatingPointRange<Float>) -> Unit = {
+        _state.value = it
     }
 
     /**
@@ -355,35 +399,34 @@ data class EasyFormsRangeSliderState(
      */
     val onValueChangeFinished: () -> Unit = {
         if (isRequired) {
-            errorState.value = when (state.value) {
+            errorState.value = when (_state.value) {
                 0F..0F -> EasyFormsErrorState.INVALID
                 else -> EasyFormsErrorState.VALID
             }
         }
     }
 
-    override val state: MutableState<ClosedFloatingPointRange<Float>> = mutableStateOf(defaultValue)
-
-    override val onValueChangedCallback: (ClosedFloatingPointRange<Float>) -> Unit = {
-        state.value = it
-    }
-
     override fun mapToResult(key: Any): EasyFormsResult.RangeSliderStateResult {
         return EasyFormsResult.RangeSliderStateResult(
             key = key,
             easyFormsErrorState = errorState.value,
-            value = state.value,
+            value = _state.value,
         )
     }
 
-    /**
-     * Returns a [rememberSaveable] state that will survive across configuration changes.
-     */
-    @Composable
-    fun rememberSaveable(): MutableState<ClosedFloatingPointRange<Float>> {
-        return rememberSaveable(stateSaver = Saver) {
-            state
-        }
+    override fun saveState(bundle: Bundle) {
+        super.saveState(bundle)
+        bundle.putFloat(START_KEY, _state.value.start)
+        bundle.putFloat(END_KEY, _state.value.endInclusive)
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        super.restoreState(bundle)
+        _state.value = bundle.getFloat(
+            START_KEY, defaultValue.start,
+        )..bundle.getFloat(
+            END_KEY, defaultValue.endInclusive,
+        )
     }
 
     /**
@@ -391,11 +434,13 @@ data class EasyFormsRangeSliderState(
      */
     companion object {
         /**
-         * The default [Saver] implementation for [ClosedFloatingPointRange].
+         * Start value of [ClosedFloatingPointRange] bundle key.
          */
-        private val Saver = Saver<ClosedFloatingPointRange<Float>, List<Float>>(
-            save = { arrayListOf(it.start, it.endInclusive) },
-            restore = { it[0]..it[1] }
-        )
+        private const val START_KEY = "start"
+
+        /**
+         * End value of [ClosedFloatingPointRange] bundle key.
+         */
+        private const val END_KEY = "end"
     }
 }

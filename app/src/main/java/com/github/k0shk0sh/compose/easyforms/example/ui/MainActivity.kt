@@ -17,6 +17,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.github.k0shk0sh.compose.easyforms.BuildEasyForms
 import com.github.k0shk0sh.compose.easyforms.EasyForms
 import com.github.k0shk0sh.compose.easyforms.EasyFormsErrorState
 import com.github.k0shk0sh.compose.easyforms.example.MainViewModel
@@ -32,8 +33,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeFormsValidationTheme {
-                EasyForm(viewModel.easyForms) {
-                    viewModel.onButtonClicked()
+                EasyForm {
+                    viewModel.onButtonClicked(it)
                 }
             }
         }
@@ -42,8 +43,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun EasyForm(
-    easyForm: EasyForms,
-    onButtonClicked: () -> Unit,
+    onButtonClicked: (EasyForms) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -52,49 +52,50 @@ private fun EasyForm(
             )
         }
     ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            EmailTextField(easyForm)
-            Space()
-            PasswordTextField(easyForm)
-            Space()
-            Salutation(easyForm)
-            Space()
-            NameTextField(easyForm)
-            Space()
-            UrlTextField(easyForm)
-            Space()
-            PhoneTextField(easyForm)
-            Space()
-            CardTextField(easyForm)
-            Space()
-            SmallText("Checkbox")
-            CheckboxLayout(easyForm)
-            Space()
-            SmallText("Custom ListCheckbox (Min Checked 2)")
-            ListCustomCheckboxLayout(easyForm, listOfCheckboxes())
-            Space()
-            SmallText("TriCheckbox")
-            TriCheckboxLayout(easyForm)
-            Space()
-            SmallText("RadioButton")
-            RadioButtonLayout(easyForm)
-            Space()
-            SmallText("Switch")
-            SwitchLayout(easyForm)
-            Space()
-            SmallText("Slider")
-            SliderLayout(easyForm)
-            Space()
-            SmallText("RangeSlider")
-            RangeSliderLayout(easyForm)
-            Space(34.dp)
-            LoginButton(easyForm, onClick = onButtonClicked)
+        BuildEasyForms { easyForm ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                EmailTextField(easyForm)
+                Space()
+                PasswordTextField(easyForm)
+                Space()
+                Salutation(easyForm)
+                Space()
+                NameTextField(easyForm)
+                Space()
+                UrlTextField(easyForm)
+                Space()
+                PhoneTextField(easyForm)
+                Space()
+                CardTextField(easyForm)
+                Space()
+                SmallText("Checkbox")
+                CheckboxLayout(easyForm)
+                Space()
+                SmallText("Custom ListCheckbox (Min Checked 2)")
+                ListCustomCheckboxLayout(easyForm, listOfCheckboxes())
+                Space()
+                SmallText("TriCheckbox")
+                TriCheckboxLayout(easyForm)
+                Space()
+                SmallText("RadioButton")
+                RadioButtonLayout(easyForm)
+                Space()
+                SmallText("Switch")
+                SwitchLayout(easyForm)
+                Space()
+                SmallText("Slider")
+                SliderLayout(easyForm)
+                Space()
+                SmallText("RangeSlider")
+                RangeSliderLayout(easyForm)
+                Space(34.dp)
+                LoginButton(easyForm, onClick = { onButtonClicked.invoke(easyForm) })
+            }
         }
     }
 }
@@ -127,5 +128,5 @@ private fun LoginButton(
 @Preview(showBackground = true)
 @Composable
 fun ReviewForm() {
-    EasyForm(easyForm = EasyForms()) {}
+    EasyForm {}
 }

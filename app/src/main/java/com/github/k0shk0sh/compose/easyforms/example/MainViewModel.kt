@@ -8,9 +8,8 @@ import com.github.k0shk0sh.compose.easyforms.example.custom_states.MyEasyFormsCu
 import com.github.k0shk0sh.compose.easyforms.example.custom_states.MyFormKeys
 
 class MainViewModel : ViewModel() {
-    val easyForms = EasyForms()
 
-    fun onButtonClicked() {
+    fun onButtonClicked(easyForms: EasyForms) {
         val formData = easyForms.formData()
         formData.forEach {
             when (val result = it) {
