@@ -95,3 +95,4 @@ jobs:
           target: ${{ steps.determine-target.outputs.TARGET }}
           profile: Galaxy Nexus
           emulator-build: 7425822 # https://github.com/ReactiveCircus/android-emulator-runner/issues/160
+          script: ./gradlew :easyforms:connectedAndroidTest
