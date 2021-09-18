@@ -41,10 +41,11 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
 
+      - name: Github Release
+        run: ./gradlew githubRelease
+
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Github Release
-        run: ./gradlew githubRelease
+          branch: 'dokka-branch'
