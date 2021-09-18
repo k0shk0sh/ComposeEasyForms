@@ -38,8 +38,13 @@ internal class EasyFormsRestorationHandler(
         }
     }
 
-    @Suppress
+    /**
+     * @suppress
+     */
     companion object {
+        /**
+         * Bundle key used by [EasyForms] to store its bundle of form fields data.
+         */
         private const val BUNDLE_KEY = "easyforms_bundle_key"
     }
 }

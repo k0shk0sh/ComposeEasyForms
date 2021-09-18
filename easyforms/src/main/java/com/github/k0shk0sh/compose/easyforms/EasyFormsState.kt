@@ -58,9 +58,18 @@ abstract class EasyFormsState<ST, CT> {
         errorState.value = bundle.getSerializable(ERROR_KEY) as EasyFormsErrorState
     }
 
-    @Suppress
+    /**
+     * @suppress
+     */
     companion object {
+        /**
+         * Error bundle key.
+         */
         private const val ERROR_KEY = "error"
+
+        /**
+         * Value bundle key.
+         */
         internal const val VALUE_KEY = "value"
     }
 }
@@ -420,9 +429,18 @@ data class EasyFormsRangeSliderState(
         )
     }
 
-    @Suppress
+    /**
+     * @suppress
+     */
     companion object {
+        /**
+         * Start value of [ClosedFloatingPointRange] bundle key.
+         */
         private const val START_KEY = "start"
+
+        /**
+         * End value of [ClosedFloatingPointRange] bundle key.
+         */
         private const val END_KEY = "end"
     }
 }
