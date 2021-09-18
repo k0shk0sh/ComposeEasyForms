@@ -1,8 +1,6 @@
-import com.github.k0shk0sh.plugins.getLibVersion
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URL
-import com.github.k0shk0sh.plugins.LibVersionProvider
 
 buildscript {
     repositories {
@@ -19,7 +17,7 @@ buildscript {
 plugins {
     id(AppPlugins.DOKKA) version DependenciesVersion.DOKKA_VERSION
     id(AppPlugins.GITHUB_RELEASE) version DependenciesVersion.GITHUB_RELEASE_VERSION
-    `lib-version`
+    id("com.github.k0shk0sh.easy.version") version "0.1.0"
 }
 
 subprojects {
@@ -29,8 +27,13 @@ subprojects {
     }
 }
 
+easyVersion {
+    setToProjectVersion = true
+    logVersion = true
+}
+
 githubRelease {
-    val version =  { LibVersionProvider.versionFile().getLibVersion() }
+    val version =  { project.version.toString() }
     token(System.getenv("GITHUB_TOKEN"))
     owner("k0shk0sh")
     repo("ComposeEasyForms")
