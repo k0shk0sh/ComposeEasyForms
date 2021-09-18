@@ -37,7 +37,7 @@ fun BuildMyAwesomeForm(
     BuildEasyForms { easyForm ->
       Column {
         // your Composables
-        LoginButton(easyForms, { onClick(easyForms) })
+        LoginButton(easyForms) { onClick(easyForms) }
       }
     }
   }
@@ -58,7 +58,7 @@ fun EmailTextField(easyForms: EasyForms) {
     easyFormsValidationType = EmailValidationType,
     defaultValue = "",
   )
-  val state = textFieldState.rememberSaveable()
+  val state = textFieldState.state
   TextField(
     value = state.value,
     onValueChange = textFieldState.onValueChangedCallback,
@@ -77,7 +77,7 @@ fun PasswordTextField(easyForms: EasyForms) {
     easyFormsValidationType = PasswordValidationType,
     defaultValue = "",
   )
-  val state = textFieldState.rememberSaveable()
+  val state = textFieldState.state
   TextField(
     value = state.value,
     onValueChange = textFieldState.onValueChangedCallback,
@@ -96,7 +96,7 @@ fun PhoneTextField(easyForms: EasyForms) {
     easyFormsValidationType = PhoneValidationType,
     defaultValue = "",
   )
-  val state = textFieldState.rememberSaveable()
+  val state = textFieldState.state
   TextField(
     value = state.value,
     onValueChange = textFieldState.onValueChangedCallback,
@@ -115,7 +115,7 @@ fun UrlTextField(easyForms: EasyForms) {
     easyFormsValidationType = UrlValidationType,
     defaultValue = "",
   )
-  val state = textFieldState.rememberSaveable()
+  val state = textFieldState.state
   TextField(
     value = state.value,
     onValueChange = textFieldState.onValueChangedCallback,
@@ -134,7 +134,7 @@ fun NameTextField(easyForms: EasyForms) {
     easyFormsValidationType = NameValidationType,
     defaultValue = "",
   )
-  val state = textFieldState.rememberSaveable()
+  val state = textFieldState.state
   TextField(
     value = state.value,
     onValueChange = textFieldState.onValueChangedCallback,
@@ -153,7 +153,7 @@ fun CardTextField(easyForms: EasyForms) {
     easyFormsValidationType = CardValidationType,
     defaultValue = "",
   )
-  val state = textFieldState.rememberSaveable()
+  val state = textFieldState.state
   TextField(
     value = state.value,
     onValueChange = textFieldState.onValueChangedCallback,
@@ -191,7 +191,7 @@ To use your custom validation:
 @Composable
 fun MyTextField(easyForms: EasyForms) {
   val textFieldState = easyForms.getTextFieldState(MyFormKeys.MY_KEY, MyCustomValidationType)
-  val state = textFieldState.rememberSaveable()
+  val state = textFieldState.state
   TextField(
     value = state.value,
     onValueChange = textFieldState.onValueChangedCallback,
@@ -210,7 +210,7 @@ fun CheckboxLayout(easyForms: EasyForms) {
     defaultValue = false,
     isRequired = true,
   )
-  val checkedState = checkboxState.rememberSaveable()
+  val checkedState = checkboxState.state
   Checkbox(
     checked = checkedState.value,
     onCheckedChange = checkboxState.onValueChangedCallback,
@@ -228,7 +228,7 @@ fun TriCheckboxLayout(easyForms: EasyForms) {
     defaultValue = ToggleableState.Indeterminate,
     isRequired = true,
   )
-  val checkedState = checkboxState.rememberSaveable()
+  val checkedState = checkboxState.state
   TriStateCheckbox(
     state = checkedState.value,
     onClick = checkboxState.onClick,
@@ -246,7 +246,7 @@ fun RadioButtonLayout(easyForms: EasyForms) {
     defaultValue = false,
     isRequired = true,
   )
-  val checkedState = radioButtonState.rememberSaveable()
+  val checkedState = radioButtonState.state
   RadioButton(
     state = checkedState.value,
     onClick = radioButtonState.onClick,
@@ -264,7 +264,7 @@ fun SwitchLayout(easyForms: EasyForms) {
     defaultValue = false,
     isRequired = true,
   )
-  val checkedState = switchState.rememberSaveable()
+  val checkedState = switchState.state
   Checkbox(
     checked = checkedState.value,
     onCheckedChange = switchState.onValueChangedCallback,
@@ -282,7 +282,7 @@ fun SliderLayout(easyForms: EasyForms) {
     defaultValue = 0F,
     isRequired = true,
   )
-  val sliderPosition = state.rememberSaveable()
+  val sliderPosition = state.state
   Slider(
     value = sliderPosition.value,
     onValueChange = state.onValueChangedCallback,
@@ -301,7 +301,7 @@ fun RangeSliderLayout(easyForms: EasyForms) {
     defaultValue = 0F..0F,
     isRequired = true
   )
-  val sliderPosition = state.rememberSaveable()
+  val sliderPosition = state.state
   RangeSlider(
     value = sliderPosition.value,
     onValueChange = state.onValueChangedCallback,

@@ -12,6 +12,7 @@ import androidx.compose.ui.state.ToggleableState
 /**
  * A class that manage all your forms states.
  * Always create one instance per ViewModel or Compose screen.
+ * @param savedStateHandle the [SaveableStateRegistry] to use to save & restore form fields state.
  */
 class EasyForms internal constructor(
     savedStateHandle: SaveableStateRegistry? = null,
