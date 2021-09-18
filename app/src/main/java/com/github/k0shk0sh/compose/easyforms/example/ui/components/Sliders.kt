@@ -10,7 +10,7 @@ import com.github.k0shk0sh.compose.easyforms.example.custom_states.MyFormKeys
 fun SliderLayout(easyForm: EasyForms) {
     Column {
         val state = easyForm.getSliderState(MyFormKeys.SLIDER)
-        val sliderPosition = state.rememberSaveable().value
+        val sliderPosition = state.state.value
         Text(text = "${state.errorState.value}:$sliderPosition")
         Slider(
             value = sliderPosition,
@@ -31,7 +31,7 @@ fun SliderLayout(easyForm: EasyForms) {
 fun RangeSliderLayout(easyForm: EasyForms) {
     Column {
         val state = easyForm.getRangeSliderState(MyFormKeys.RANGE_SLIDER)
-        val sliderPosition = state.rememberSaveable().value
+        val sliderPosition = state.state.value
 
         Text(text = "${state.errorState.value}:$sliderPosition")
         RangeSlider(

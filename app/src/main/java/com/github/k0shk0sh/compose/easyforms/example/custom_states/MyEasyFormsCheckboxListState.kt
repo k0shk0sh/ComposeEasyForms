@@ -1,5 +1,7 @@
 package com.github.k0shk0sh.compose.easyforms.example.custom_states
 
+import android.os.Bundle
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.listSaver
@@ -42,16 +44,17 @@ class MyEasyFormsCheckboxListState(
         )
     }
 
+    override fun saveState(bundle: Bundle) {
+        super.saveState(bundle)
+        bundle.putParcelableArrayList("value", ArrayList(state.toList()))
+    }
 
-    @Composable
-    fun rememberSaveable(): SnapshotStateList<CheckboxModel> {
-        return rememberSaveable(
-            saver = listSaver(
-                save = { it.toList() },
-                restore = { it.toMutableStateList() }
-            )
-        ) {
-            state
+    override fun restoreState(bundle: Bundle) {
+        super.restoreState(bundle)
+        (bundle.getParcelableArrayList<CheckboxModel>("value"))?.let { array ->
+            array.forEachIndexed { index, checkboxModel ->
+                state[index] = checkboxModel
+            }
         }
     }
 }

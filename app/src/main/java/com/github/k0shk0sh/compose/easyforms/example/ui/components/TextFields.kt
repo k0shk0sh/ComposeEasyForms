@@ -21,7 +21,7 @@ import com.github.k0shk0sh.compose.easyforms.*
 @Composable
 fun NameTextField(easyForm: EasyForms) {
     val nameTextFieldState = easyForm.getTextFieldState(MyFormKeys.NAME, NameValidationType)
-    val nameState = nameTextFieldState.rememberSaveable()
+    val nameState = nameTextFieldState.state
     TextField(
         value = nameState.value,
         onValueChange = nameTextFieldState.onValueChangedCallback,
@@ -42,7 +42,7 @@ fun NameTextField(easyForm: EasyForms) {
 @Composable
 fun EmailTextField(easyForm: EasyForms) {
     val emailTextFieldState = easyForm.getTextFieldState(MyFormKeys.EMAIL, EmailValidationType)
-    val emailState = emailTextFieldState.rememberSaveable()
+    val emailState = emailTextFieldState.state
     TextField(
         value = emailState.value,
         onValueChange = emailTextFieldState.onValueChangedCallback,
@@ -63,7 +63,7 @@ fun EmailTextField(easyForm: EasyForms) {
 @Composable
 fun PasswordTextField(easyForm: EasyForms) {
     val textFieldState = easyForm.getTextFieldState(MyFormKeys.PASSWORD, PasswordValidationType)
-    val textState = textFieldState.rememberSaveable()
+    val textState = textFieldState.state
     val passwordVisibility = remember { mutableStateOf(false) }
     TextField(
         value = textState.value,
@@ -103,7 +103,7 @@ fun PasswordTextField(easyForm: EasyForms) {
 @Composable
 fun UrlTextField(easyForm: EasyForms) {
     val textFieldState = easyForm.getTextFieldState(MyFormKeys.URL, UrlValidationType)
-    val textState = textFieldState.rememberSaveable()
+    val textState = textFieldState.state
     TextField(
         value = textState.value,
         onValueChange = textFieldState.onValueChangedCallback,
@@ -124,7 +124,7 @@ fun UrlTextField(easyForm: EasyForms) {
 @Composable
 fun PhoneTextField(easyForm: EasyForms) {
     val textFieldState = easyForm.getTextFieldState(MyFormKeys.PHONE, PhoneNumberValidationType)
-    val textState = textFieldState.rememberSaveable()
+    val textState = textFieldState.state
     TextField(
         value = textState.value,
         onValueChange = textFieldState.onValueChangedCallback,
@@ -145,7 +145,7 @@ fun PhoneTextField(easyForm: EasyForms) {
 @Composable
 fun CardTextField(easyForm: EasyForms) {
     val textFieldState = easyForm.getTextFieldState(MyFormKeys.CARD, CardValidationType)
-    val textState = textFieldState.rememberSaveable()
+    val textState = textFieldState.state
     TextField(
         value = textState.value,
         onValueChange = textFieldState.onValueChangedCallback,

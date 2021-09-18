@@ -22,8 +22,8 @@ fun Salutation(
     val state = easyForm.addAndGetCustomState(MyFormKeys.SALUTATION, MyEasyFormsCustomStringState(
         validData = list
     ))
-    val text = state.rememberSaveable()
-    val isOpen = state.rememberOpen()
+    val text = state.state
+    val isOpen = state.isOpen
     Box {
         Column {
             TextField(

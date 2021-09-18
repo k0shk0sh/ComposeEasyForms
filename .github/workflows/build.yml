@@ -46,3 +46,53 @@ jobs:
         run: |
           ./gradlew --stacktrace \
               :easyforms:testDebugUnitTest
+
+  test:
+    if: github.event_name == 'pull_request' # only for PRs
+    runs-on: macos-latest
+    needs: build
+    timeout-minutes: 50
+
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [ 29 ]
+        shard: [ 0, 1 ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+
+      - name: Determine emulator target
+        id: determine-target
+        env:
+          API_LEVEL: ${{ matrix.api-level }}
+        run: |
+          TARGET="default"
+          if [ "$API_LEVEL" -ge "29" ]; then
+            TARGET="google_apis"
+          fi
+          echo "::set-output name=TARGET::$TARGET"
+      - name: Run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ steps.determine-target.outputs.TARGET }}
+          profile: Galaxy Nexus
+          emulator-build: 7425822 # https://github.com/ReactiveCircus/android-emulator-runner/issues/160
+          script: ./gradlew :easyforms:connectedAndroidTest
