@@ -236,7 +236,7 @@ class EasyForms internal constructor(
 }
 
 /**
- * [EasyForms] key identifier for the current composable
+ * [EasyForms] key identifier for the current composable.
  */
 private const val EASY_FORMS_KEY = "EasyFormsKey"
 
