@@ -6,10 +6,6 @@ Focus on building your form UI while the library do the heavy work for you.
 
 ## Features
 
-### Process death restoration
-
-EasyForms provides out of the box process death restoration by relying on .
-
 ### Built in support for most of the Form widgets in Compose
 
 - [Initializing](#Initializing)
@@ -26,6 +22,8 @@ EasyForms provides out of the box process death restoration by relying on .
 ## Examples
 
 #### Initializing
+
+> EasyForms handles process death out of the box 😎.
 
 ```kotlin
 @Composable
