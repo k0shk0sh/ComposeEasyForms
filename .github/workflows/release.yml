@@ -49,3 +49,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: 'dokka-branch'
+          message: 'update docs and bumped version. skip-ci'
