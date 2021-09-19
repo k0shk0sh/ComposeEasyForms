@@ -41,12 +41,13 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
 
-      - name: Github Release
-        run: ./gradlew githubRelease
-
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: 'dokka-branch'
+          github_token: ${{ secrets.SUPER_TOKEN }}
           message: 'update docs and bumped version. skip-ci'
+
+      - name: Github Release
+        run: ./gradlew githubRelease
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPER_TOKEN }}

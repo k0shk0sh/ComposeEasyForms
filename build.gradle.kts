@@ -33,14 +33,14 @@ easyVersion {
 }
 
 githubRelease {
-    val version =  { project.version.toString() }
+    val version = Callable<CharSequence> { project.version.toString() }
     token(System.getenv("GITHUB_TOKEN"))
     owner("k0shk0sh")
     repo("ComposeEasyForms")
     tagName(version)
     targetCommitish("main")
-    releaseName(version)
-    body(changelog())
+    releaseName { "Release: ${version.call()}" }
+    body { "ComposeEasyForms new Release: ${version.call()}" }
 }
 
 fun Project.configureDokka() {
