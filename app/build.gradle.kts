@@ -1,3 +1,6 @@
+import com.github.k0shk0sh.easy.version.versionName
+import com.github.k0shk0sh.easy.version.versionCode
+
 plugins {
     id(AppPlugins.ANDROID_APP)
     id(AppPlugins.KOTLIN_ANDROID)
@@ -15,8 +18,8 @@ android {
         applicationId = AppConfig.EXAMPLE_PACKAGE_NAME
         minSdk = AppConfig.MIN_SDK
         targetSdk = AppConfig.TARGET_SDK
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = rootProject.versionCode as Int
+        versionName = rootProject.versionName as String
     }
 
     buildTypes {
