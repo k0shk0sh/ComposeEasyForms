@@ -344,7 +344,8 @@ fun LoginButton(
 https://user-images.githubusercontent.com/960767/134132572-09648756-68fa-4184-ac87-71979eda61f5.mp4
 
 
-## Download
+## Download [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.k0shk0sh/compose-easyforms/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.k0shk0sh/compose-easyforms)
+
 
 ```kotlin
 repositories {
