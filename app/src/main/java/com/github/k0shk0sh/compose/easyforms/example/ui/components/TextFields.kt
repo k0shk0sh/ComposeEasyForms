@@ -12,11 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.github.k0shk0sh.compose.easyforms.example.custom_states.MyFormKeys
 import com.github.k0shk0sh.compose.easyforms.*
+import com.github.k0shk0sh.compose.easyforms.example.custom_states.MyEasyFormsTextFieldFocusState
 
 @Composable
 fun NameTextField(easyForm: EasyForms) {
@@ -36,6 +38,32 @@ fun NameTextField(easyForm: EasyForms) {
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         modifier = Modifier.fillMaxWidth(),
+    )
+}
+
+@Composable
+fun CustomOnNotFocusErrorTextField(easyForm: EasyForms) {
+    val textFieldState = easyForm.addAndGetCustomState(
+        MyFormKeys.CUSTOM_FOCUS,
+        MyEasyFormsTextFieldFocusState(NameValidationType),
+    )
+    val state = textFieldState.state
+    TextField(
+        value = state.value,
+        onValueChange = textFieldState.onValueChangedCallback,
+        isError = textFieldState.errorState.value == EasyFormsErrorState.INVALID,
+        label = { Text("OnUnfocused error") },
+        placeholder = { Text("OnUnfocused error") },
+        leadingIcon = {
+            Icon(
+                Icons.Outlined.Person,
+                contentDescription = "Name",
+            )
+        },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        modifier = Modifier
+            .fillMaxWidth()
+            .onFocusChanged(textFieldState.onFocusChanged),
     )
 }
 
